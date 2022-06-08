@@ -1,6 +1,7 @@
 .box {
   height: var(--box-size);
   width: var(--box-size);
+  justify-content: center;
 
   &:hover {
     background-color: var(--box-hover-color);

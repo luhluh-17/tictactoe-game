@@ -84,9 +84,30 @@ div {
   font-size: var(--h1);
 }
 
+.flex, .flex-row, .flex-column {
+  display: flex;
+  gap: var(--space-1);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
 .box {
   height: var(--box-size);
   width: var(--box-size);
+  justify-content: center;
 }
 .box:hover {
   background-color: var(--box-hover-color);
@@ -145,26 +166,6 @@ main {
   padding: var(--space-4);
   height: 100vh;
   width: 100vw;
-}
-
-.flex, .flex-row, .flex-column {
-  display: flex;
-  gap: var(--space-1);
-  align-items: center;
-  justify-content: space-between;
-}
-
-.flex-column {
-  flex-direction: column;
-}
-
-.flex-row {
-  flex-direction: row;
-}
-
-.grid-3 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
 }
 
 /*# sourceMappingURL=main.css.map */
