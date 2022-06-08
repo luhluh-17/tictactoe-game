@@ -1,0 +1,21 @@
+body {
+  font-family: 'Heebo', sans-serif;
+}
+
+$elements: (
+  'h1': var(--h1),
+  'h2': var(--h2),
+  'h3': var(--h3),
+  'h4': var(--h4),
+  'h5': var(--h5),
+  'h6': var(--h6),
+  'p': var(--p),
+  'button': var(--h6),
+  'div': var(--h1)
+);
+
+@each $name, $value in $elements {
+  #{$name} {
+    font-size: $value;
+  }
+}

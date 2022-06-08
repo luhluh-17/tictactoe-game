@@ -1,0 +1,21 @@
+.flex {
+  display: flex;
+  gap: var(--space-6);
+  align-items: center;
+  justify-content: center
+}
+
+.flex-column {
+  @extend .flex;
+  flex-direction: column;
+}
+
+.flex-row {
+  @extend .flex;
+  flex-direction: row;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
