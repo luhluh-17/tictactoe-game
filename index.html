@@ -8,22 +8,45 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/0869152999.js" crossorigin="anonymous" defer></script>
   <link rel="stylesheet" href="css/main.css">
   <title>TicTacToe</title>
 </head>
 
 <body>
   <main class="flex-column">
+    <section class="flex-row">
+      <div class="flex-column">
+        <h5><i class="fa-solid fa-x"></i></h5>
+        <p>Player 1</p>
+      </div>
+      <div>
+        <h5><span>0</span>:<span>0</span>:<span>0</span></h5>
+      </div>
+      <div class="flex-column">
+        <h5><i class="fa-solid fa-o"></i></h5>
+        <p>Player 2</p>
+      </div>
+    </section>
     <section class="grid-3">
-      <div class="box top-left flex">X</div>
-      <div class="box top-center flex">O</div>
-      <div class="box top-right flex">X</div>
-      <div class="box mid-left flex">O</div>
-      <div class="box mid-center flex">X</div>
-      <div class="box mid-right flex">O</div>
-      <div class="box bot-left flex">X</div>
-      <div class="box bot-center flex">O</div>
-      <div class="box bot-right flex">X</div>
+      <div class="box top-left flex"></div>
+      <div class="box top-center flex"></div>
+      <div class="box top-right flex"></div>
+      <div class="box mid-left flex"></div>
+      <div class="box mid-center flex"></div>
+      <div class="box mid-right flex"></div>
+      <div class="box bot-left flex"></div>
+      <div class="box bot-center flex"></div>
+      <div class="box bot-right flex"></div>
+    </section>
+    <section class="flex-row">
+      <button>Return</button>
+      <div class="flex-row">
+        <button>Undo</button>
+        <button>Restart</button>
+        <button>Redo</button>
+      </div>
+      <button>History</button>
     </section>
   </main>
 </body>
