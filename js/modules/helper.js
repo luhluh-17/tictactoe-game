@@ -29,6 +29,6 @@ export const checkWin = (array, char) => {
   return patterns.some(hasPattern)
 }
 
-export const newState = (array) => JSON.parse(JSON.stringify(array))
+export const deepCopy = (array) => JSON.parse(JSON.stringify(array))
 
 export const toggleValue = (char) => (char === 'x' ? 'o' : 'x')
