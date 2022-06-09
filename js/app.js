@@ -32,8 +32,12 @@ gridItems.forEach((element) => {
       boardState.push(deepCopy(board))
       element.append(addIcon(value))
       value = toggleValue(value)
-      const result = checkWin(boardState[boardState.length - 1], value)
-      console.log(result)
+
+      const boardIndex = boardState.length - 1
+      if (boardIndex >= 5) {
+        const result = checkWin(boardState[boardIndex], value)
+        console.log(result)
+      }
     }
   })
 })
