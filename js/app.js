@@ -1,4 +1,4 @@
-import { addIcon, newState } from './modules/helper.js'
+import { addIcon, checkWin, newState, toggleValue } from './modules/helper.js'
 
 const grid = document.querySelector('[data-board]')
 const gridItems = Array.from(grid.children)
@@ -24,9 +24,9 @@ gridItems.forEach((element) => {
       boardState.push(newState(template))
 
       element.append(addIcon(value))
-      value = value === 'x' ? 'o' : 'x'
+      value = toggleValue(value)
+
+      checkWin(boardState[boardState.length - 1], value)
     }
   })
 })
-
-
