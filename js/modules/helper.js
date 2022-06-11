@@ -6,3 +6,13 @@ export const addIcon = (name) => {
 }
 
 export const deepCopy = (array) => JSON.parse(JSON.stringify(array))
+
+export const makeCounter = () => {
+  let count = 0
+  return {
+    changeValue: (value) => (count = value),
+    increment: (max) => (count < max ? ++count : count),
+    decrement: () => (count > 0 ? --count : count),
+    value: () => count,
+  }
+}

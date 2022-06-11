@@ -1,6 +1,6 @@
 export class Move {
-  constructor(value, coordinate) {
-    this.value = value
+  constructor(symbol, coordinate) {
+    this.symbol = symbol
     this.coordinate = coordinate
   }
 
@@ -23,6 +23,6 @@ export class Move {
   }
 
   toString() {
-    return `${this.value.toUpperCase()} - ${this.position}`
+    return `${this.symbol.toUpperCase()} - ${this.position}`
   }
 }
