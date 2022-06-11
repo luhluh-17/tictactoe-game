@@ -1,7 +1,8 @@
 import { Move } from './classes/move.js'
-import { addIcon, checkWin, deepCopy, toggleValue } from './modules/helper.js'
+import { addIcon, deepCopy } from './modules/helper.js'
+import { checkWin, displayBoard, toggleSymbol } from './modules/tictactoe.js'
 
-const grid = document.querySelector('[data-board]')
+const container = document.querySelector('[data-board]')
 
 const btnReturn = document.querySelector('[data-return]')
 const btnUndo = document.querySelector('[data-undo]')
@@ -15,34 +16,29 @@ const TEMPLATE = [
   ['', '', ''],
 ]
 
-let value = 'x'
-const gridItems = Array.from(grid.children)
-
+let symbol = 'x'
 let moves = []
-let boardState = []
+let boardStates = []
 let board = deepCopy(TEMPLATE)
-boardState.push(deepCopy(board))
+boardStates.push(deepCopy(board))
 
-gridItems.forEach((element) => {
-  element.addEventListener('click', () => {
-    if (!element.hasChildNodes()) {
-      const index = gridItems.indexOf(element)
-      const y = Math.floor(index / 3)
-      const x = index % 3
+const rows = Array.from(container.children)
+rows.forEach((cols, x) => {
+  Array.from(cols.children).forEach((div, y) => {
+    div.addEventListener('click', () => {
+      if (!div.hasChildNodes()) {
+        board[y][x] = symbol
+        moves.push(new Move(symbol, [y, x]))
 
-      board[y][x] = value
-      moves.push(new Move(value, [y, x]))
+        const turn = boardStates.push(deepCopy(board)) - 1
+        div.append(addIcon(symbol))
 
-      boardState.push(deepCopy(board))
-      element.append(addIcon(value))
-      value = toggleValue(value)
-
-      const boardIndex = boardState.length - 1
-
-      if (boardIndex >= 5) {
-        const result = checkWin(boardState[boardIndex], value)
+        if (turn > 4) {
+          const result = checkWin(boardStates[turn], symbol)
+        }
+        symbol = toggleSymbol(symbol)
       }
-    }
+    })
   })
 })
 
@@ -60,10 +56,11 @@ btnHistory.addEventListener('click', () => {
 
 function restart() {
   moves = []
-  boardState = []
+  boardStates = []
   board = deepCopy(TEMPLATE)
-  boardState.push(deepCopy(board))
-  gridItems.forEach((element) => {
-    Array.from(element.children).forEach((icon) => icon.remove())
-  })
+  boardStates.push(deepCopy(board))
+
+  displayBoard(rows, board)
 }
+
+
