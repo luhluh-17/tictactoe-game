@@ -1,6 +1,5 @@
 .flex {
   display: flex;
-  gap: var(--space-1);
   align-items: center;
   justify-content: space-between
 }
@@ -13,9 +12,4 @@
 .flex-row {
   @extend .flex;
   flex-direction: row;
-}
-
-.grid-3 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
 }
