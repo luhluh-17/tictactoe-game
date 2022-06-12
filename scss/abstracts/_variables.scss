@@ -8,21 +8,18 @@
   --h6: 0.8rem;
   --p: 1rem;
 
-  // padding/gaps/spacing
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.25rem;
-  --space-6: 1.75rem;
-  --space-7: 2rem;
-
   // box
   --box-size: 7.5rem;
   --box-outline: 0.2rem;
 
+  // button container
+  --btn-container: calc(var(--box-size) * 3);
+
   // colors
+  --primary-color: #f92571;
+  --secondary-color: #ad81ff;
+  --neutral-color: #929292;
+  --background-color: #1b1b1b;
   --box-color: white;
-  --box-hover-color: hsl(0, 0%, 90%);
-  --box-border-color: hsl(0, 0%, 13%);
+  --box-hover-color: #303030;
 }

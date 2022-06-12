@@ -1,0 +1,18 @@
+.btn {
+  background-color: var(--background-color);
+  color: white;
+  opacity: 0.6;
+  transition: 0.3s;
+  &:hover {
+    background-color: var(--box-hover-color);
+    cursor: pointer;
+    opacity: 1;
+  }
+}
+
+button {
+  @extend .btn;
+  border: 0.125rem solid var(--primary-color);
+  border-radius: 1rem;
+  padding: 0.5rem 2rem;
+}

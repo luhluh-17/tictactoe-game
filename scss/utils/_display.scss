@@ -1,10 +1,10 @@
 .flex {
   display: flex;
   align-items: center;
-  justify-content: space-between
+  justify-content: space-between;
 }
 
-.flex-column {
+.flex-col {
   @extend .flex;
   flex-direction: column;
 }

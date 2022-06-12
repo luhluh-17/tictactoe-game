@@ -4,7 +4,6 @@ import { checkWin, displayBoard, toggleSymbol } from './modules/tictactoe.js'
 
 const container = document.querySelector('[data-board]')
 
-const btnReturn = document.querySelector('[data-return]')
 const btnUndo = document.querySelector('[data-undo]')
 const btnRestart = document.querySelector('[data-restart]')
 const btnRedo = document.querySelector('[data-redo]')
@@ -46,8 +45,6 @@ rows.forEach((cols, y) => {
     })
   })
 })
-
-btnReturn.addEventListener('click', () => alert('return'))
 
 btnUndo.addEventListener('click', () => {
   const turn = counter.decrement()
