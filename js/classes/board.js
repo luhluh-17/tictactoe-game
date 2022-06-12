@@ -1,5 +1,6 @@
-export class Move {
-  constructor(symbol, coordinate) {
+export class Board {
+  constructor(state, symbol = null, coordinate = null) {
+    this.state = state
     this.symbol = symbol
     this.coordinate = coordinate
   }
