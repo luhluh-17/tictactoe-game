@@ -2,6 +2,7 @@
   height: var(--box-size);
   width: var(--box-size);
   justify-content: center;
+  transition: background-color 1s;
 
   &:hover {
     background-color: var(--box-hover-color);

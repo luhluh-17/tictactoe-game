@@ -2,11 +2,18 @@ import { Board } from './classes/board.js'
 import {
   addIcon,
   addItem,
+  boxColor,
   deepCopy,
   deleteChildren,
   makeCounter,
 } from './modules/helper.js'
-import { checkWin, displayBoard, toggleSymbol } from './modules/tictactoe.js'
+import {
+  checkWin,
+  displayBoard,
+  highlightPattern,
+  toggleSymbol,
+  updateScore,
+} from './modules/game.js'
 
 const container = document.querySelector('[data-board]')
 
@@ -50,6 +57,8 @@ rows.forEach((cols, y) => {
 
         if (turn > 4) {
           const result = checkWin(boardStates[turn].state, symbol)
+          updateScore(result.hasWon, turn, symbol)
+          highlightPattern(result, rows)
         }
         symbol = toggleSymbol(symbol)
       }
@@ -61,11 +70,21 @@ btnUndo.addEventListener('click', () => {
   const turn = counter.decrement()
   displayBoard(rows, boardStates[turn].state)
   symbol = toggleSymbol(boardStates[turn].symbol)
+
+  rows.forEach((cols) => {
+    Array.from(cols.children).forEach((div) => {
+      div.style.backgroundColor = boxColor('background')
+    })
+  })
 })
 
 btnRedo.addEventListener('click', () => {
   const turn = counter.increment(boardStates.length - 1)
   displayBoard(rows, boardStates[turn].state)
+
+  const result = checkWin(boardStates[turn].state, symbol)
+  highlightPattern(result, rows)
+
   symbol = toggleSymbol(boardStates[turn].symbol)
 })
 
@@ -76,6 +95,12 @@ btnRestart.addEventListener('click', () => {
   counter.changeValue(0)
   displayBoard(rows, board)
   deleteChildren(list)
+
+  rows.forEach((cols) => {
+    Array.from(cols.children).forEach((div) => {
+      div.style.backgroundColor = boxColor('background')
+    })
+  })
 })
 
 btnHistory.addEventListener('click', () => {
@@ -90,9 +115,9 @@ btnHistory.addEventListener('click', () => {
     boardStates.forEach((board, i) => {
       if (i == 0) {
         return
+      } else {
+        list.append(addItem(`${i}. ${board.toString()}`))
       }
-
-      list.append(addItem(`${i}. ${board.toString()}`))
     })
   }
 

@@ -13,6 +13,11 @@ export const addItem = (text) => {
   return item
 }
 
+export const boxColor = (name) => {
+  const styles = window.getComputedStyle(document.body)
+  return styles.getPropertyValue(`--${name}-color`)
+}
+
 export const deepCopy = (array) => JSON.parse(JSON.stringify(array))
 
 export const deleteChildren = (list) => {
