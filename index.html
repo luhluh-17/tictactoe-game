@@ -19,7 +19,7 @@
   <main class="flex-col">
     <section class="flex-row">
       <h5>Tic Tac Toe</h5>
-      <button data-history><i class="fa-solid fa-clock-rotate-left"></i></button>
+      <button data-btn="history"><i class="fa-solid fa-clock-rotate-left"></i></button>
     </section>
     <section class="flex-row">
       <div class="flex-col">
@@ -53,11 +53,27 @@
       </div>
     </section>
     <section class="flex-row">
-      <button data-undo><i class="fa-solid fa-rotate-left"></i></button>
-      <button data-restart><i class="fa-solid fa-repeat"></i></button>
-      <button data-redo><i class="fa-solid fa-rotate-right"></i></button>
+      <button data-btn="undo"><i class="fa-solid fa-rotate-left"></i></button>
+      <button data-btn="restart"><i class="fa-solid fa-repeat"></i></button>
+      <button data-btn="redo"><i class="fa-solid fa-rotate-right"></i></button>
     </section>
   </main>
+
+  <dialog data-modal class="modal">
+    <div class=" flex-col">
+      <header class="flex-row">
+        <p>History</p>
+      </header>
+      <section>
+        <ul data-list></ul>
+        <div class="flex-col" data-img>
+          <img src="assets/empty.png" alt="Empty Content">
+          <h6>Empty Content</h6>
+        </div>
+      </section>
+      <button data-btn="continue">Continue</button>
+    </div>
+  </dialog>
 </body>
 
 </html>

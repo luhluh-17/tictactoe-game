@@ -6,15 +6,15 @@
   --h5: 1.5rem;
   --h6: 0.8rem;
   --p: 1rem;
-  --box-size: 7.5rem;
-  --box-outline: 0.2rem;
-  --btn-container: calc(var(--box-size) * 3);
   --primary-color: #f92571;
   --secondary-color: #ad81ff;
   --neutral-color: #929292;
   --background-color: #1b1b1b;
-  --box-color: white;
   --box-hover-color: #303030;
+  --box-size: 7.5rem;
+  --box-outline: 0.2rem;
+  --section-width: calc(var(--box-size) * 3);
+  --modal-width: calc(var(--box-size) * 2.5);
 }
 
 html {
@@ -85,6 +85,7 @@ div {
   background-color: var(--background-color);
   color: white;
 }
+.dark dialog,
 .dark h5 {
   color: var(--neutral-color);
 }
@@ -161,22 +162,44 @@ div {
   border-bottom: none;
 }
 
-.btn, button {
+button {
   background-color: var(--background-color);
+  border: 0.125rem solid var(--primary-color);
+  border-radius: 1rem;
   color: white;
   opacity: 0.6;
+  padding: 0.5rem 2rem;
   transition: 0.3s;
 }
-.btn:hover, button:hover {
+button:focus {
+  outline: none;
+}
+button:hover {
   background-color: var(--box-hover-color);
   cursor: pointer;
   opacity: 1;
 }
 
-button {
-  border: 0.125rem solid var(--primary-color);
+.modal {
+  background-color: var(--background-color);
+  border: var(--box-outline) solid var(--primary-color);
   border-radius: 1rem;
-  padding: 0.5rem 2rem;
+  padding: 1rem;
+  width: var(--modal-width);
+}
+.modal section {
+  margin: 2rem;
+}
+.modal img {
+  margin-bottom: 1rem;
+  opacity: 0.25;
+}
+.modal h6 {
+  opacity: 0.5;
+}
+
+.modal::backdrop {
+  background-color: hsla(0deg, 0%, 6%, 0.75);
 }
 
 main {
@@ -184,9 +207,8 @@ main {
   height: 100vh;
   width: 100vw;
 }
-
-section {
-  width: var(--btn-container);
+main section {
+  width: var(--section-width);
 }
 
 /*# sourceMappingURL=main.css.map */

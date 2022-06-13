@@ -8,18 +8,18 @@
   --h6: 0.8rem;
   --p: 1rem;
 
-  // box
-  --box-size: 7.5rem;
-  --box-outline: 0.2rem;
-
-  // button container
-  --btn-container: calc(var(--box-size) * 3);
-
   // colors
   --primary-color: #f92571;
   --secondary-color: #ad81ff;
   --neutral-color: #929292;
   --background-color: #1b1b1b;
-  --box-color: white;
   --box-hover-color: #303030;
+
+  // box
+  --box-size: 7.5rem;
+  --box-outline: 0.2rem;
+
+  // button container
+  --section-width: calc(var(--box-size) * 3);
+  --modal-width: calc(var(--box-size) * 2.5);
 }

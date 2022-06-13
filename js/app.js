@@ -1,13 +1,23 @@
 import { Board } from './classes/board.js'
-import { addIcon, deepCopy, makeCounter } from './modules/helper.js'
+import {
+  addIcon,
+  addItem,
+  deepCopy,
+  deleteChildren,
+  makeCounter,
+} from './modules/helper.js'
 import { checkWin, displayBoard, toggleSymbol } from './modules/tictactoe.js'
 
 const container = document.querySelector('[data-board]')
 
-const btnUndo = document.querySelector('[data-undo]')
-const btnRestart = document.querySelector('[data-restart]')
-const btnRedo = document.querySelector('[data-redo]')
-const btnHistory = document.querySelector('[data-history]')
+const btnHistory = document.querySelector('[data-btn="history"]')
+const modal = document.querySelector('[data-modal]')
+const btnContinue = document.querySelector('[data-btn="continue"]')
+const list = document.querySelector('[data-list]')
+
+const btnUndo = document.querySelector('[data-btn="undo"]')
+const btnRestart = document.querySelector('[data-btn="restart"]')
+const btnRedo = document.querySelector('[data-btn="redo"]')
 
 const TEMPLATE = [
   ['', '', ''],
@@ -37,6 +47,7 @@ rows.forEach((cols, y) => {
         const newBoard = new Board(deepCopy(board), symbol, [y, x])
         const turn = boardStates.push(newBoard) - 1
         counter.changeValue(turn)
+
         if (turn > 4) {
           const result = checkWin(boardStates[turn].state, symbol)
         }
@@ -64,15 +75,31 @@ btnRestart.addEventListener('click', () => {
   boardStates.push(new Board(deepCopy(board)))
   counter.changeValue(0)
   displayBoard(rows, board)
+  deleteChildren(list)
 })
 
 btnHistory.addEventListener('click', () => {
-  let msg = ''
-  boardStates.forEach((board, i) => {
-    if (i === 0) {
-      return
-    }
-    msg += board.toString() + '\n'
-  })
-  alert(msg)
+  const img = document.querySelector('[data-img]')
+  if (boardStates.length === 1) {
+    list.style.display = 'none'
+    img.style.display = 'flex'
+  } else {
+    list.style.display = 'block'
+    img.style.display = 'none'
+
+    boardStates.forEach((board, i) => {
+      if (i == 0) {
+        return
+      }
+
+      list.append(addItem(`${i}. ${board.toString()}`))
+    })
+  }
+
+  modal.showModal()
+})
+
+btnContinue.addEventListener('click', () => {
+  deleteChildren(list)
+  modal.close()
 })

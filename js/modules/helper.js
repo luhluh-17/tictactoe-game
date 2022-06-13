@@ -5,7 +5,21 @@ export const addIcon = (name) => {
   return icon
 }
 
+export const addItem = (text) => {
+  const item = document.createElement('li')
+  const paragraph = document.createElement('p')
+  paragraph.textContent = text
+  item.append(paragraph)
+  return item
+}
+
 export const deepCopy = (array) => JSON.parse(JSON.stringify(array))
+
+export const deleteChildren = (list) => {
+  Array.from(list.children).forEach((child) => {
+    list.removeChild(child)
+  })
+}
 
 export const makeCounter = () => {
   let count = 0
