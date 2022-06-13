@@ -2,7 +2,6 @@ import { Board } from './classes/board.js'
 import {
   addIcon,
   addItem,
-  boxColor,
   deepCopy,
   deleteChildren,
   makeCounter,
@@ -32,6 +31,7 @@ const TEMPLATE = [
   ['', '', ''],
 ]
 
+let degree = 0
 let symbol = 'x'
 let boardStates = []
 let board = deepCopy(TEMPLATE)
@@ -73,7 +73,7 @@ btnUndo.addEventListener('click', () => {
 
   rows.forEach((cols) => {
     Array.from(cols.children).forEach((div) => {
-      div.style.backgroundColor = boxColor('background')
+      div.style.backgroundColor = 'transparent'
     })
   })
 })
@@ -89,6 +89,10 @@ btnRedo.addEventListener('click', () => {
 })
 
 btnRestart.addEventListener('click', () => {
+  if (boardStates.length > 1) {
+    container.style.transform = `rotate(${(degree += 360)}deg)`
+  }
+
   boardStates = []
   board = deepCopy(TEMPLATE)
   boardStates.push(new Board(deepCopy(board)))
@@ -98,7 +102,7 @@ btnRestart.addEventListener('click', () => {
 
   rows.forEach((cols) => {
     Array.from(cols.children).forEach((div) => {
-      div.style.backgroundColor = boxColor('background')
+      div.style.backgroundColor = 'transparent'
     })
   })
 })

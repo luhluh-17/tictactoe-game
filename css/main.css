@@ -212,4 +212,8 @@ main section {
   width: var(--section-width);
 }
 
+#board {
+  transition: transform 1.5s;
+}
+
 /*# sourceMappingURL=main.css.map */
