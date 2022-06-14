@@ -1,4 +1,5 @@
-import { addIcon, boxColor, loopBoardItem } from './helper.js'
+import { icon } from './element.js'
+import { boxColor, loopBoardItem } from './helper.js'
 
 export const checkWin = (array, symbol) => {
   const patterns = [
@@ -24,7 +25,7 @@ export const createBoard = (container, board) => {
   loopBoardItem(container, (btn, i, j) => {
     btn.innerHTML = ''
     if (board[i][j].length === 1) {
-      btn.append(addIcon(board[i][j]))
+      btn.append(icon(board[i][j]))
     }
   })
 }
@@ -34,7 +35,7 @@ export const highlightPattern = (container, pattern) => {
   loopBoardItem(container, (btn) => {
     if (pattern.includes(index)) {
       btn.style.backgroundColor = boxColor('primary-dark')
-      btn.firstChild.classList.add("fa-beat")
+      btn.firstChild.classList.add('fa-beat')
     }
     index++
   })

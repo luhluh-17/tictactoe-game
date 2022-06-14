@@ -7,14 +7,15 @@
   --h6: 0.8rem;
   --p: 1rem;
   --primary-color: #f92571;
-  --primary-dark-color: rgb(249, 37, 113, 0.5);
+  --primary-dark-color: hsla(338, 95%, 56%, 0.5);
+  --primary-light-color: hsla(338, 95%, 90%);
   --neutral-color: #929292;
   --background-color: #1b1b1b;
   --box-hover-color: #303030;
   --box-size: 7.5rem;
   --box-outline: 0.2rem;
   --section-width: calc(var(--box-size) * 3);
-  --modal-width: calc(var(--box-size) * 2.5);
+  --modal-width: calc(var(--box-size) * 2.75);
 }
 
 html {
@@ -188,6 +189,7 @@ button.btn-box {
   border-radius: 1rem;
   padding: 1rem;
   width: var(--modal-width);
+  overflow: hidden;
 }
 .modal section {
   margin: 2rem;
