@@ -15,8 +15,8 @@ export const makeCounter = () => {
   let count = 0
   return {
     changeValue: (value) => (count = value),
-    increment: (max) => (count < max ? ++count : count),
-    decrement: () => (count > 0 ? --count : count),
+    increment: (max) => (count = count < max ? ++count : count),
+    decrement: () => (count = count > 0 ? --count : count),
     value: () => count,
   }
 }

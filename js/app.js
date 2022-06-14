@@ -41,10 +41,19 @@ const removeUnusedState = () => {
   board = deepCopy(boardList[boardList.length - 1].state)
 }
 
-const displayBoard = (cb) => {
-  const index = cb()
+const displayBoard = (index) => {
   createBoard(container, boardList[index].state)
   return boardList[index]
+}
+
+const addIteminMoveList = (action, turn) => {
+  if (action === 'undo') {
+    turn += 1
+  }
+  const text = `${action} - Turn ${turn}`
+  if (moveList.at(-1) !== text) {
+    moveList.push(text)
+  }
 }
 
 const reset = () => {
@@ -73,8 +82,11 @@ loopBoardItem(container, (btn, i, j) => {
       board[i][j] = symbol
       btn.append(icon(symbol))
 
-      const newBoard = new Board(deepCopy(board), symbol, [i, j])
-      const turn = counter.changeValue(boardList.push(newBoard) - 1)
+      let turn = boardList.length
+      const newBoard = new Board(deepCopy(board), turn, symbol, [i, j])
+      moveList.push(newBoard.toString())
+
+      turn = counter.changeValue(boardList.push(newBoard) - 1)
 
       if (turn > 4) {
         const result = checkWin(boardList[turn].state, symbol)
@@ -91,17 +103,20 @@ loopBoardItem(container, (btn, i, j) => {
 })
 
 btnUndo.addEventListener('click', () => {
-  const board = displayBoard(() => counter.decrement())
+  const board = displayBoard(counter.decrement())
   symbol = toggleSymbol(board.symbol)
+
   loopBoardItem(container, (btn) => {
     btn.disabled = false
     btn.removeAttribute('style')
   })
+
+  addIteminMoveList('undo', board.turn)
 })
 
 btnRedo.addEventListener('click', () => {
-  const board = displayBoard(() => counter.increment(boardList.length - 1))
-  symbol = board.symbol
+  const board = displayBoard(counter.increment(boardList.length - 1))
+  symbol = toggleSymbol(board.symbol)
 
   if (counter.value() === boardList.length - 1) {
     if (pattern.length !== 0) {
@@ -109,9 +124,11 @@ btnRedo.addEventListener('click', () => {
       loopBoardItem(container, (btn) => (btn.disabled = true))
     }
   }
+
+  addIteminMoveList('redo', board.turn)
 })
 
-btnRestart.addEventListener('click', () => displayBoard(reset))
+btnRestart.addEventListener('click', () => displayBoard(reset()))
 
 btnHistory.addEventListener('click', () => {
   if (boardList.length === 1) {
@@ -119,12 +136,6 @@ btnHistory.addEventListener('click', () => {
     const text = 'Oops! Nothing to show here'
     contentHistory.append(imageText(src, text))
   } else {
-    boardList.forEach((board, i) => {
-      if (i !== 0) {
-        moveList.push(`Turn ${i} - ${board.toString()}`)
-      }
-    })
-
     contentHistory.append(unorderedList(moveList))
   }
 

@@ -7,7 +7,21 @@
   overflow: hidden;
 
   section {
-    margin: 2rem;
+    margin: 1rem;
+  }
+
+  ul {
+    display: flex;
+    margin: 0 1rem;
+    overflow-y: auto;
+    max-height: 50vh;
+    width: 100%;
+    scroll-snap-type: y mandatory;
+    text-transform: capitalize;
+  }
+
+  p {
+    padding: 0 1.5rem;
   }
 
   img {

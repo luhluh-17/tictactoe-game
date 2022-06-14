@@ -1,6 +1,7 @@
 export class Board {
-  constructor(state, symbol = '', coordinate = []) {
+  constructor(state, turn = 0, symbol = '', coordinate = []) {
     this.state = state
+    this.turn = turn
     this.symbol = symbol
     this.coordinate = coordinate
   }
@@ -16,6 +17,7 @@ export class Board {
       'Bot-Left': [2, 0],
       'Bot-Center': [2, 1],
       'Bot-Right': [2, 2],
+      'Back to Start': [],
     }
 
     const equals = (key) =>
@@ -24,6 +26,6 @@ export class Board {
   }
 
   toString() {
-    return `${this.symbol.toUpperCase()} - ${this.position}`
+    return `Turn ${this.turn} - ${this.symbol} - ${this.position}`
   }
 }

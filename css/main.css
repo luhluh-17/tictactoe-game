@@ -192,7 +192,19 @@ button.btn-box {
   overflow: hidden;
 }
 .modal section {
-  margin: 2rem;
+  margin: 1rem;
+}
+.modal ul {
+  display: flex;
+  margin: 0 1rem;
+  overflow-y: auto;
+  max-height: 50vh;
+  width: 100%;
+  scroll-snap-type: y mandatory;
+  text-transform: capitalize;
+}
+.modal p {
+  padding: 0 1.5rem;
 }
 .modal img {
   margin-bottom: 1rem;
@@ -204,6 +216,20 @@ button.btn-box {
 
 .modal::backdrop {
   background-color: hsla(0deg, 0%, 6%, 0.75);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--primary-dark-color);
+  border-radius: 1rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-light-color);
+  border-radius: 1rem;
 }
 
 main {
