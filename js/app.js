@@ -1,26 +1,20 @@
 import { Board } from './classes/board.js'
-import {
-  addIcon,
-  addItem,
-  deepCopy,
-  deleteChildren,
-  makeCounter,
-} from './modules/helper.js'
+import { addIcon, addItem, deepCopy, makeCounter } from './modules/helper.js'
 import {
   checkWin,
-  displayBoard,
+  createBoard,
   highlightPattern,
   toggleSymbol,
   updateScore,
 } from './modules/game.js'
 
 const container = document.querySelector('[data-board]')
+const modal = document.querySelector('[data-modal]')
+
+const moveHistory = document.querySelector('[data-list]')
+const btnContinue = document.querySelector('[data-btn="continue"]')
 
 const btnHistory = document.querySelector('[data-btn="history"]')
-const modal = document.querySelector('[data-modal]')
-const btnContinue = document.querySelector('[data-btn="continue"]')
-const list = document.querySelector('[data-list]')
-
 const btnUndo = document.querySelector('[data-btn="undo"]')
 const btnRestart = document.querySelector('[data-btn="restart"]')
 const btnRedo = document.querySelector('[data-btn="redo"]')
@@ -33,32 +27,37 @@ const TEMPLATE = [
 
 let degree = 0
 let symbol = 'x'
-let boardStates = []
+let pattern = []
+let boardList = []
 let board = deepCopy(TEMPLATE)
-boardStates.push(new Board(deepCopy(board)))
 let counter = makeCounter()
+boardList.push(new Board(deepCopy(board)))
 
 const rows = Array.from(container.children)
 rows.forEach((cols, y) => {
   Array.from(cols.children).forEach((div, x) => {
     div.addEventListener('click', () => {
       if (!div.hasChildNodes()) {
-        if (counter.value() < boardStates.length - 1) {
-          boardStates.splice(counter.value() + 1, boardStates.length - 1)
-          board = deepCopy(boardStates[boardStates.length - 1].state)
+        if (counter.value() < boardList.length - 1) {
+          pattern = []
+          boardList.splice(counter.value() + 1, boardList.length - 1)
+          board = deepCopy(boardList[boardList.length - 1].state)
         }
 
         board[y][x] = symbol
         div.append(addIcon(symbol))
 
         const newBoard = new Board(deepCopy(board), symbol, [y, x])
-        const turn = boardStates.push(newBoard) - 1
+        const turn = boardList.push(newBoard) - 1
         counter.changeValue(turn)
 
         if (turn > 4) {
-          const result = checkWin(boardStates[turn].state, symbol)
+          const result = checkWin(boardList[turn].state, symbol)
           updateScore(result.hasWon, turn, symbol)
-          highlightPattern(result, rows)
+          if (result.hasWon) {
+            pattern = result.pattern
+            highlightPattern(pattern, rows)
+          }
         }
         symbol = toggleSymbol(symbol)
       }
@@ -66,61 +65,61 @@ rows.forEach((cols, y) => {
   })
 })
 
+const displayBoard = (cb) => {
+  const index = cb()
+  createBoard(rows, boardList[index].state)
+  return boardList[index]
+}
+
+const reset = () => {
+  if (boardList.length > 1) {
+    container.style.transform = `rotate(${(degree += 360)}deg)`
+  }
+
+  pattern = []
+  boardList = []
+  board = deepCopy(TEMPLATE)
+  boardList.push(new Board(deepCopy(board)))
+  counter.changeValue(0)
+  moveHistory.innerHTML = ''
+  rows.forEach((cols) =>
+    Array.from(cols.children).forEach((div) => div.removeAttribute('style'))
+  )
+  return counter.value()
+}
+
 btnUndo.addEventListener('click', () => {
-  const turn = counter.decrement()
-  displayBoard(rows, boardStates[turn].state)
-  symbol = toggleSymbol(boardStates[turn].symbol)
+  const board = displayBoard(() => counter.decrement())
+  symbol = toggleSymbol(board.symbol)
 
   rows.forEach((cols) => {
-    Array.from(cols.children).forEach((div) => {
-      div.style.backgroundColor = 'transparent'
-    })
+    Array.from(cols.children).forEach((div) => div.removeAttribute('style'))
   })
 })
 
 btnRedo.addEventListener('click', () => {
-  const turn = counter.increment(boardStates.length - 1)
-  displayBoard(rows, boardStates[turn].state)
+  const board = displayBoard(() => counter.increment(boardList.length - 1))
+  symbol = board.symbol
 
-  const result = checkWin(boardStates[turn].state, symbol)
-  highlightPattern(result, rows)
-
-  symbol = toggleSymbol(boardStates[turn].symbol)
-})
-
-btnRestart.addEventListener('click', () => {
-  if (boardStates.length > 1) {
-    container.style.transform = `rotate(${(degree += 360)}deg)`
+  if (counter.value() === boardList.length - 1) {
+    highlightPattern(pattern, rows)
   }
-
-  boardStates = []
-  board = deepCopy(TEMPLATE)
-  boardStates.push(new Board(deepCopy(board)))
-  counter.changeValue(0)
-  displayBoard(rows, board)
-  deleteChildren(list)
-
-  rows.forEach((cols) => {
-    Array.from(cols.children).forEach((div) => {
-      div.style.backgroundColor = 'transparent'
-    })
-  })
 })
+
+btnRestart.addEventListener('click', () => displayBoard(reset))
 
 btnHistory.addEventListener('click', () => {
-  const img = document.querySelector('[data-img]')
-  if (boardStates.length === 1) {
-    list.style.display = 'none'
-    img.style.display = 'flex'
+  const moveContainer = document.querySelector('[data-container="moves"]')
+  if (boardList.length === 1) {
+    moveHistory.style.display = 'none'
+    moveContainer.style.display = 'flex'
   } else {
-    list.style.display = 'block'
-    img.style.display = 'none'
+    moveHistory.style.display = 'block'
+    moveContainer.style.display = 'none'
 
-    boardStates.forEach((board, i) => {
-      if (i == 0) {
-        return
-      } else {
-        list.append(addItem(`${i}. ${board.toString()}`))
+    boardList.forEach((board, i) => {
+      if (i !== 0) {
+        moveHistory.append(addItem(`${i}. ${board.toString()}`))
       }
     })
   }
@@ -129,6 +128,6 @@ btnHistory.addEventListener('click', () => {
 })
 
 btnContinue.addEventListener('click', () => {
-  deleteChildren(list)
+  moveHistory.innerHTML = ''
   modal.close()
 })

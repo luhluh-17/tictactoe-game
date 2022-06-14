@@ -1,5 +1,5 @@
 export class Board {
-  constructor(state, symbol = null, coordinate = null) {
+  constructor(state, symbol = '', coordinate = []) {
     this.state = state
     this.symbol = symbol
     this.coordinate = coordinate

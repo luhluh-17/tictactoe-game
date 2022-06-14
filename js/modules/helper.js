@@ -20,12 +20,6 @@ export const boxColor = (name) => {
 
 export const deepCopy = (array) => JSON.parse(JSON.stringify(array))
 
-export const deleteChildren = (list) => {
-  Array.from(list.children).forEach((child) => {
-    list.removeChild(child)
-  })
-}
-
 export const makeCounter = () => {
   let count = 0
   return {
