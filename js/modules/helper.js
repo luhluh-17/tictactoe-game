@@ -20,6 +20,12 @@ export const boxColor = (name) => {
 
 export const deepCopy = (array) => JSON.parse(JSON.stringify(array))
 
+export const loopBoardItem = (container, cb) => {
+  Array.from(container.children).forEach((cols, index1) => {
+    Array.from(cols.children).forEach((div, index2) => cb(div, index1, index2))
+  })
+}
+
 export const makeCounter = () => {
   let count = 0
   return {

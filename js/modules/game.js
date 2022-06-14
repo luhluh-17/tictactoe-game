@@ -1,4 +1,4 @@
-import { addIcon, boxColor } from './helper.js'
+import { addIcon, boxColor, loopBoardItem } from './helper.js'
 
 export const checkWin = (array, symbol) => {
   const patterns = [
@@ -20,26 +20,22 @@ export const checkWin = (array, symbol) => {
   return { hasWon, pattern }
 }
 
-export const createBoard = (rows, board) => {
-  rows.forEach((cols, y) => {
-    Array.from(cols.children).forEach((div, x) => {
-      div.innerHTML = ''
-      if (board[y][x].length === 1) {
-        div.append(addIcon(board[y][x]))
-      }
-    })
+export const createBoard = (container, board) => {
+  loopBoardItem(container, (div, i, j) => {
+    div.innerHTML = ''
+    if (board[i][j].length === 1) {
+      div.append(addIcon(board[i][j]))
+    }
   })
 }
 
-export const highlightPattern = (pattern, rows) => {
+export const highlightPattern = (container, pattern) => {
   let index = 0
-  rows.forEach((cols) => {
-    Array.from(cols.children).forEach((div) => {
-      if (pattern.includes(index)) {
-        div.style.backgroundColor = boxColor('primary-dark')
-      }
-      index++
-    })
+  loopBoardItem(container, (div) => {
+    if (pattern.includes(index)) {
+      div.style.backgroundColor = boxColor('primary-dark')
+    }
+    index++
   })
 }
 

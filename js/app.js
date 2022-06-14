@@ -1,5 +1,11 @@
 import { Board } from './classes/board.js'
-import { addIcon, addItem, deepCopy, makeCounter } from './modules/helper.js'
+import {
+  addIcon,
+  addItem,
+  deepCopy,
+  loopBoardItem,
+  makeCounter,
+} from './modules/helper.js'
 import {
   checkWin,
   createBoard,
@@ -33,41 +39,15 @@ let board = deepCopy(TEMPLATE)
 let counter = makeCounter()
 boardList.push(new Board(deepCopy(board)))
 
-const rows = Array.from(container.children)
-rows.forEach((cols, y) => {
-  Array.from(cols.children).forEach((div, x) => {
-    div.addEventListener('click', () => {
-      if (!div.hasChildNodes()) {
-        if (counter.value() < boardList.length - 1) {
-          pattern = []
-          boardList.splice(counter.value() + 1, boardList.length - 1)
-          board = deepCopy(boardList[boardList.length - 1].state)
-        }
-
-        board[y][x] = symbol
-        div.append(addIcon(symbol))
-
-        const newBoard = new Board(deepCopy(board), symbol, [y, x])
-        const turn = boardList.push(newBoard) - 1
-        counter.changeValue(turn)
-
-        if (turn > 4) {
-          const result = checkWin(boardList[turn].state, symbol)
-          updateScore(result.hasWon, turn, symbol)
-          if (result.hasWon) {
-            pattern = result.pattern
-            highlightPattern(pattern, rows)
-          }
-        }
-        symbol = toggleSymbol(symbol)
-      }
-    })
-  })
-})
+const removeUnusedState = () => {
+  pattern = []
+  boardList.splice(counter.value() + 1, boardList.length)
+  board = deepCopy(boardList[boardList.length - 1].state)
+}
 
 const displayBoard = (cb) => {
   const index = cb()
-  createBoard(rows, boardList[index].state)
+  createBoard(container, boardList[index].state)
   return boardList[index]
 }
 
@@ -80,21 +60,41 @@ const reset = () => {
   boardList = []
   board = deepCopy(TEMPLATE)
   boardList.push(new Board(deepCopy(board)))
-  counter.changeValue(0)
   moveHistory.innerHTML = ''
-  rows.forEach((cols) =>
-    Array.from(cols.children).forEach((div) => div.removeAttribute('style'))
-  )
-  return counter.value()
+  loopBoardItem(container, (div) => div.removeAttribute('style'))
+  return counter.changeValue(0)
 }
+
+loopBoardItem(container, (div, i, j) => {
+  div.addEventListener('click', () => {
+    if (!div.hasChildNodes()) {
+      if (counter.value() < boardList.length - 1) {
+        removeUnusedState()
+      }
+
+      board[i][j] = symbol
+      div.append(addIcon(symbol))
+
+      const newBoard = new Board(deepCopy(board), symbol, [i, j])
+      const turn = counter.changeValue(boardList.push(newBoard) - 1)
+
+      if (turn > 4) {
+        const result = checkWin(boardList[turn].state, symbol)
+        updateScore(result.hasWon, turn, symbol)
+        if (result.hasWon) {
+          pattern = result.pattern
+          highlightPattern(container, pattern)
+        }
+      }
+      symbol = toggleSymbol(symbol)
+    }
+  })
+})
 
 btnUndo.addEventListener('click', () => {
   const board = displayBoard(() => counter.decrement())
   symbol = toggleSymbol(board.symbol)
-
-  rows.forEach((cols) => {
-    Array.from(cols.children).forEach((div) => div.removeAttribute('style'))
-  })
+  loopBoardItem(container, (div) => div.removeAttribute('style'))
 })
 
 btnRedo.addEventListener('click', () => {
@@ -102,7 +102,7 @@ btnRedo.addEventListener('click', () => {
   symbol = board.symbol
 
   if (counter.value() === boardList.length - 1) {
-    highlightPattern(pattern, rows)
+    highlightPattern(container, pattern)
   }
 })
 
