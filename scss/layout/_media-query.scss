@@ -1,0 +1,9 @@
+$smartphone-max: 425px;
+
+/* Smartphones */
+@media only screen and (max-width: $smartphone-max) {
+  :root {
+    --box-size: 5.5rem;
+  }
+}
+

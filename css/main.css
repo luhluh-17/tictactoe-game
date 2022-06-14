@@ -245,4 +245,11 @@ main section {
   transition: transform 1.5s;
 }
 
+/* Smartphones */
+@media only screen and (max-width: 425px) {
+  :root {
+    --box-size: 5.5rem;
+  }
+}
+
 /*# sourceMappingURL=main.css.map */
