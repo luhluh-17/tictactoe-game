@@ -34,6 +34,7 @@ export const highlightPattern = (container, pattern) => {
   loopBoardItem(container, (div) => {
     if (pattern.includes(index)) {
       div.style.backgroundColor = boxColor('primary-dark')
+      div.firstChild.classList.add("fa-beat")
     }
     index++
   })
