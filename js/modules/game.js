@@ -21,20 +21,20 @@ export const checkWin = (array, symbol) => {
 }
 
 export const createBoard = (container, board) => {
-  loopBoardItem(container, (div, i, j) => {
-    div.innerHTML = ''
+  loopBoardItem(container, (btn, i, j) => {
+    btn.innerHTML = ''
     if (board[i][j].length === 1) {
-      div.append(addIcon(board[i][j]))
+      btn.append(addIcon(board[i][j]))
     }
   })
 }
 
 export const highlightPattern = (container, pattern) => {
   let index = 0
-  loopBoardItem(container, (div) => {
+  loopBoardItem(container, (btn) => {
     if (pattern.includes(index)) {
-      div.style.backgroundColor = boxColor('primary-dark')
-      div.firstChild.classList.add("fa-beat")
+      btn.style.backgroundColor = boxColor('primary-dark')
+      btn.firstChild.classList.add("fa-beat")
     }
     index++
   })

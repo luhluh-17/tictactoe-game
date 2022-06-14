@@ -11,7 +11,7 @@ $elements: (
   'h6': var(--h6),
   'p': var(--p),
   'button': var(--h6),
-  'div': var(--h1)
+  'button.btn-box': var(--h1),
 );
 
 @each $name, $value in $elements {

@@ -22,7 +22,7 @@ export const deepCopy = (array) => JSON.parse(JSON.stringify(array))
 
 export const loopBoardItem = (container, cb) => {
   Array.from(container.children).forEach((cols, index1) => {
-    Array.from(cols.children).forEach((div, index2) => cb(div, index1, index2))
+    Array.from(cols.children).forEach((btn, index2) => cb(btn, index1, index2))
   })
 }
 

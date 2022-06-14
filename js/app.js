@@ -61,19 +61,23 @@ const reset = () => {
   board = deepCopy(TEMPLATE)
   boardList.push(new Board(deepCopy(board)))
   moveHistory.innerHTML = ''
-  loopBoardItem(container, (div) => div.removeAttribute('style'))
+  loopBoardItem(container, (btn) => {
+    btn.disabled = false
+    btn.removeAttribute('style')
+  })
+
   return counter.changeValue(0)
 }
 
-loopBoardItem(container, (div, i, j) => {
-  div.addEventListener('click', () => {
-    if (!div.hasChildNodes()) {
+loopBoardItem(container, (btn, i, j) => {
+  btn.addEventListener('click', () => {
+    if (!btn.hasChildNodes()) {
       if (counter.value() < boardList.length - 1) {
         removeUnusedState()
       }
 
       board[i][j] = symbol
-      div.append(addIcon(symbol))
+      btn.append(addIcon(symbol))
 
       const newBoard = new Board(deepCopy(board), symbol, [i, j])
       const turn = counter.changeValue(boardList.push(newBoard) - 1)
@@ -84,6 +88,7 @@ loopBoardItem(container, (div, i, j) => {
         if (result.hasWon) {
           pattern = result.pattern
           highlightPattern(container, pattern)
+          loopBoardItem(container, (btn) => (btn.disabled = true))
         }
       }
       symbol = toggleSymbol(symbol)
@@ -94,7 +99,10 @@ loopBoardItem(container, (div, i, j) => {
 btnUndo.addEventListener('click', () => {
   const board = displayBoard(() => counter.decrement())
   symbol = toggleSymbol(board.symbol)
-  loopBoardItem(container, (div) => div.removeAttribute('style'))
+  loopBoardItem(container, (btn) => {
+    btn.disabled = false
+    btn.removeAttribute('style')
+  })
 })
 
 btnRedo.addEventListener('click', () => {
@@ -102,7 +110,10 @@ btnRedo.addEventListener('click', () => {
   symbol = board.symbol
 
   if (counter.value() === boardList.length - 1) {
-    highlightPattern(container, pattern)
+    if (pattern.length !== 0) {
+      highlightPattern(container, pattern)
+      loopBoardItem(container, (btn) => (btn.disabled = true))
+    }
   }
 })
 

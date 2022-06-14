@@ -77,7 +77,7 @@ button {
   font-size: var(--h6);
 }
 
-div {
+button.btn-box {
   font-size: var(--h1);
 }
 
@@ -102,17 +102,6 @@ div {
 
 .flex-row {
   flex-direction: row;
-}
-
-.box {
-  height: var(--box-size);
-  width: var(--box-size);
-  justify-content: center;
-  transition: background-color 1s;
-}
-.box:hover {
-  background-color: var(--box-hover-color);
-  cursor: pointer;
 }
 
 .top-left {
@@ -163,21 +152,33 @@ div {
   border-bottom: none;
 }
 
-button {
-  background-color: var(--background-color);
+.btn, .btn-icon, .btn-box {
+  background-color: transparent;
+  color: white;
+}
+.btn:focus, .btn-icon:focus, .btn-box:focus {
+  outline: none;
+}
+.btn:hover, .btn-icon:hover, .btn-box:hover {
+  background-color: var(--box-hover-color);
+  cursor: pointer;
+}
+
+.btn-box {
+  height: var(--box-size);
+  width: var(--box-size);
+  justify-content: center;
+  transition: background-color 0.5s;
+}
+
+.btn-icon {
   border: 0.125rem solid var(--primary-color);
   border-radius: 1rem;
-  color: white;
   opacity: 0.6;
   padding: 0.5rem 2rem;
   transition: 0.3s;
 }
-button:focus {
-  outline: none;
-}
-button:hover {
-  background-color: var(--box-hover-color);
-  cursor: pointer;
+.btn-icon:hover {
   opacity: 1;
 }
 

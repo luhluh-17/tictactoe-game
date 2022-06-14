@@ -1,15 +1,3 @@
-.box {
-  height: var(--box-size);
-  width: var(--box-size);
-  justify-content: center;
-  transition: background-color 1s;
-
-  &:hover {
-    background-color: var(--box-hover-color);
-    cursor: pointer;
-  }
-}
-
 .top-left {
   border: var(--box-outline) solid var(--primary-color);
   border-top: none;

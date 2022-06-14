@@ -19,7 +19,9 @@
   <main class="flex-col">
     <section class="flex-row">
       <h5>Tic Tac Toe</h5>
-      <button data-btn="history"><i class="fa-solid fa-clock-rotate-left"></i></button>
+      <button class="btn-icon" data-btn="history">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+      </button>
     </section>
     <section class="flex-row">
       <div class="flex-col">
@@ -37,25 +39,31 @@
     </section>
     <section id="board" class="flex-col" data-board>
       <div class="flex-row">
-        <div class="box top-left flex"></div>
-        <div class="box top-center flex"></div>
-        <div class="box top-right flex"></div>
+        <button class="btn-box top-left flex"></button>
+        <button class="btn-box top-center flex"></button>
+        <button class="btn-box top-right flex"></button>
       </div>
       <div class="flex-row">
-        <div class="box mid-left flex"></div>
-        <div class="box mid-center flex"></div>
-        <div class="box mid-right flex"></div>
+        <button class="btn-box mid-left flex"></button>
+        <button class="btn-box mid-center flex"></button>
+        <button class="btn-box mid-right flex"></button>
       </div>
       <div class="flex-row">
-        <div class="box bot-left flex"></div>
-        <div class="box bot-center flex"></div>
-        <div class="box bot-right flex"></div>
+        <button class="btn-box bot-left flex"></button>
+        <button class="btn-box bot-center flex"></button>
+        <button class="btn-box bot-right flex"></button>
       </div>
     </section>
     <section class="flex-row">
-      <button data-btn="undo"><i class="fa-solid fa-rotate-left"></i></button>
-      <button data-btn="restart"><i class="fa-solid fa-repeat"></i></button>
-      <button data-btn="redo"><i class="fa-solid fa-rotate-right"></i></button>
+      <button class="btn-icon" data-btn="undo">
+        <i class="fa-solid fa-rotate-left"></i>
+      </button>
+      <button class="btn-icon" data-btn="restart">
+        <i class="fa-solid fa-repeat"></i>
+      </button>
+      <button class="btn-icon" data-btn="redo">
+        <i class="fa-solid fa-rotate-right"></i>
+      </button>
     </section>
   </main>
 
@@ -71,7 +79,7 @@
           <h6>Oops! Nothing to show here</h6>
         </div>
       </section>
-      <button data-btn="continue">Continue</button>
+      <button class="btn-icon" data-btn="continue">Continue</button>
     </div>
   </dialog>
 </body>

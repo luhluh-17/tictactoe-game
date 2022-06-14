@@ -1,11 +1,6 @@
-button {
-  background-color: var(--background-color);
-  border: 0.125rem solid var(--primary-color);
-  border-radius: 1rem;
+.btn {
+  background-color: transparent;
   color: white;
-  opacity: 0.6;
-  padding: 0.5rem 2rem;
-  transition: 0.3s;
 
   &:focus {
     outline: none;
@@ -14,6 +9,26 @@ button {
   &:hover {
     background-color: var(--box-hover-color);
     cursor: pointer;
+  }
+}
+
+.btn-box {
+  @extend .btn;
+  height: var(--box-size);
+  width: var(--box-size);
+  justify-content: center;
+  transition: background-color 0.5s;
+}
+
+.btn-icon {
+  @extend .btn;
+  border: 0.125rem solid var(--primary-color);
+  border-radius: 1rem;
+  opacity: 0.6;
+  padding: 0.5rem 2rem;
+  transition: 0.3s;
+
+  &:hover {
     opacity: 1;
   }
 }
