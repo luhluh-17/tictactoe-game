@@ -148,8 +148,8 @@ button.btn-box {
 
 .bot-right {
   border: var(--box-outline) solid var(--primary-color);
-  border-right: none;
   border-bottom: none;
+  border-right: none;
 }
 
 .btn, .btn-icon, .btn-box {

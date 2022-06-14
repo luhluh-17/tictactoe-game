@@ -1,47 +1,21 @@
-.top-left {
-  border: var(--box-outline) solid var(--primary-color);
-  border-top: none;
-  border-left: none;
-}
+$rows: 'top', 'mid', 'bot';
+$cols: 'left', 'center', 'right';
 
-.top-center {
-  border: var(--box-outline) solid var(--primary-color);
-  border-top: none;
-}
+@each $row in $rows {
+  @each $col in $cols {
+    .#{$row}-#{$col} {
+      border: var(--box-outline) solid var(--primary-color);
+      @if $row == 'top' {
+        border-top: none;
+      } @else if $row == 'bot' {
+        border-bottom: none;
+      }
 
-.top-right {
-  border: var(--box-outline) solid var(--primary-color);
-  border-top: none;
-  border-right: none;
-}
-
-.mid-left {
-  border: var(--box-outline) solid var(--primary-color);
-  border-left: none;
-}
-
-.mid-center {
-  border: var(--box-outline) solid var(--primary-color);
-}
-
-.mid-right {
-  border: var(--box-outline) solid var(--primary-color);
-  border-right: none;
-}
-
-.bot-left {
-  border: var(--box-outline) solid var(--primary-color);
-  border-bottom: none;
-  border-left: none;
-}
-
-.bot-center {
-  border: var(--box-outline) solid var(--primary-color);
-  border-bottom: none;
-}
-
-.bot-right {
-  border: var(--box-outline) solid var(--primary-color);
-  border-right: none;
-  border-bottom: none;
+      @if $col == 'left' {
+        border-left: none;
+      } @else if $col == 'right' {
+        border-right: none;
+      }
+    }
+  }
 }
