@@ -54,18 +54,16 @@ const displayBoard = (cb) => {
 const reset = () => {
   if (boardList.length > 1) {
     container.style.transform = `rotate(${(degree += 360)}deg)`
+    pattern = []
+    boardList = []
+    board = deepCopy(TEMPLATE)
+    boardList.push(new Board(deepCopy(board)))
+    moveHistory.innerHTML = ''
+    loopBoardItem(container, (btn) => {
+      btn.disabled = false
+      btn.removeAttribute('style')
+    })
   }
-
-  pattern = []
-  boardList = []
-  board = deepCopy(TEMPLATE)
-  boardList.push(new Board(deepCopy(board)))
-  moveHistory.innerHTML = ''
-  loopBoardItem(container, (btn) => {
-    btn.disabled = false
-    btn.removeAttribute('style')
-  })
-
   return counter.changeValue(0)
 }
 
