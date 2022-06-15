@@ -19,22 +19,27 @@
   <main class="flex-col">
     <section class="flex-row">
       <h5>Tic Tac Toe</h5>
-      <button class="btn-icon" data-btn="history">
-        <i class="fa-solid fa-clock-rotate-left"></i>
-      </button>
+      <div class="flex-row">
+        <button class="btn-round btn-sm" data-btn="history">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+        </button>
+        <button class="btn-round btn-sm" data-btn="settings">
+          <i class="fa-solid fa-gear"></i>
+        </button>
+      </div>
     </section>
     <section class="flex-row">
       <div class="flex-col">
-        <p><i class="fa-solid fa-x"></i> - score</p>
-        <h4 data-score="player1">0</h4>
+        <p><span data-player="1"><i class="fa-solid fa-x"></i></span> Player</p>
+        <h4 data-score="1">0</h4>
       </div>
       <div class="flex-col">
         <p>Draw</p>
         <h4 data-score="draw">0</h4>
       </div>
       <div class="flex-col">
-        <p><i class="fa-solid fa-o"></i> - score</p>
-        <h4 data-score="player2">0</h4>
+        <p><span data-player="2"><i class="fa-solid fa-o"></i></span> Player</p>
+        <h4 data-score="2">0</h4>
       </div>
     </section>
     <section id="board" class="flex-col" data-board>
@@ -55,25 +60,41 @@
       </div>
     </section>
     <section class="flex-row">
-      <button class="btn-icon" data-btn="undo">
+      <button class="btn-round" data-btn="undo">
         <i class="fa-solid fa-rotate-left"></i>
       </button>
-      <button class="btn-icon" data-btn="restart">
+      <button class="btn-round" data-btn="restart">
         <i class="fa-solid fa-repeat"></i>
       </button>
-      <button class="btn-icon" data-btn="redo">
+      <button class="btn-round" data-btn="redo">
         <i class="fa-solid fa-rotate-right"></i>
       </button>
     </section>
   </main>
 
-  <dialog data-modal class="modal">
+  <dialog data-modal="history" class="modal">
     <div class=" flex-col">
-      <header class="flex-row">
-        <p>History</p>
-      </header>
+      <p>History</p>
       <section data-content="history"></section>
-      <button class="btn-icon" data-btn="continue">Continue</button>
+      <button class="btn-round" data-btn="continue">Continue</button>
+    </div>
+  </dialog>
+
+  <dialog data-modal="settings" class="modal">
+    <div class=" flex-col">
+      <section class="flex-col">
+        <p>Choose Your Symbol</p>
+        <div class="flex-row" data-option="symbol">
+          <button class="btn-box btn-sm f1 borderless flex">
+            <i class="fa-solid fa-x"></i>
+          </button>
+          <button class="btn-box btn-sm borderless flex">
+            <i class="fa-solid fa-o"></i>
+          </button>
+        </div>
+      </section>
+
+      <button class="btn-round" data-btn="confirm">Confirm</button>
     </div>
   </dialog>
 </body>

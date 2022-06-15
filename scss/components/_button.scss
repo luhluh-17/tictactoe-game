@@ -18,9 +18,18 @@
   width: var(--box-size);
   justify-content: center;
   transition: background-color 0.5s;
+
+  &.borderless {
+    border: 0;
+  }
+
+  &.btn-sm {
+    height: var(--box-size-sm);
+    width: var(--box-size-sm);
+  }
 }
 
-.btn-icon {
+.btn-round {
   @extend .btn;
   border: 0.125rem solid var(--primary-color);
   border-radius: 1rem;
@@ -30,5 +39,9 @@
 
   &:hover {
     opacity: 1;
+  }
+
+  &.btn-sm {
+    padding: 0.5rem 1rem;
   }
 }

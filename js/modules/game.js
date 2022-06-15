@@ -43,16 +43,16 @@ export const highlightPattern = (container, pattern) => {
 
 export const toggleSymbol = (char) => (char === 'x' ? 'o' : 'x')
 
-export const updateScore = (result, turn, symbol) => {
+export const updateScore = (result, turn, player) => {
   const incrementScore = (value) => {
     const score = document.querySelector(`[data-score="${value}"]`)
     score.textContent = parseInt(score.textContent) + 1
   }
 
-  if (result && symbol === 'x') {
-    incrementScore('player1')
-  } else if (result && symbol === 'o') {
-    incrementScore('player2')
+  if (result && player === 'x') {
+    incrementScore('1')
+  } else if (result && player === 'o') {
+    incrementScore('2')
   } else if (!result && turn === 9) {
     incrementScore('draw')
   }

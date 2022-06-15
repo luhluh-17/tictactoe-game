@@ -1,6 +1,11 @@
 import { Board } from './classes/board.js'
 import { icon, imageText, unorderedList } from './modules/element.js'
-import { deepCopy, loopBoardItem, makeCounter } from './modules/helper.js'
+import {
+  boxColor,
+  deepCopy,
+  loopBoardItem,
+  makeCounter,
+} from './modules/helper.js'
 import {
   checkWin,
   createBoard,
@@ -10,12 +15,16 @@ import {
 } from './modules/game.js'
 
 const container = document.querySelector('[data-board]')
-const modal = document.querySelector('[data-modal]')
 
+const modalHistory = document.querySelector('[data-modal="history"]')
+const btnHistory = document.querySelector('[data-btn="history"]')
 const contentHistory = document.querySelector('[data-content="history"]')
 const btnContinue = document.querySelector('[data-btn="continue"]')
 
-const btnHistory = document.querySelector('[data-btn="history"]')
+const modalSettings = document.querySelector('[data-modal="settings"]')
+const btnSettings = document.querySelector('[data-btn="settings"]')
+const btnConfirm = document.querySelector('[data-btn="confirm"]')
+
 const btnUndo = document.querySelector('[data-btn="undo"]')
 const btnRestart = document.querySelector('[data-btn="restart"]')
 const btnRedo = document.querySelector('[data-btn="redo"]')
@@ -27,6 +36,7 @@ const TEMPLATE = [
 ]
 
 let degree = 0
+let player = 'x'
 let symbol = 'x'
 let pattern = []
 let moveList = []
@@ -90,7 +100,7 @@ loopBoardItem(container, (btn, i, j) => {
 
       if (turn > 4) {
         const result = checkWin(boardList[turn].state, symbol)
-        updateScore(result.hasWon, turn, symbol)
+        updateScore(result.hasWon, turn, player)
         if (result.hasWon) {
           pattern = result.pattern
           highlightPattern(container, pattern)
@@ -139,10 +149,53 @@ btnHistory.addEventListener('click', () => {
     contentHistory.append(unorderedList(moveList))
   }
 
-  modal.showModal()
+  modalHistory.showModal()
 })
 
 btnContinue.addEventListener('click', () => {
   contentHistory.innerHTML = ''
-  modal.close()
+  modalHistory.close()
+})
+
+btnSettings.addEventListener('click', () => {
+  const options = document.querySelector('[data-option="symbol"]')
+  const player1 = document.querySelector('[data-player="1"]')
+  const player2 = document.querySelector('[data-player="2"]')
+
+  const btnX = options.firstElementChild
+  const btnO = options.lastElementChild
+
+  const assignSymbol = (player) => {
+    player1.innerHTML = ''
+    player1.append(icon(player))
+
+    player2.innerHTML = ''
+    player2.append(icon(toggleSymbol(player)))
+  }
+
+  if (player === 'x') {
+    btnX.style.backgroundColor = boxColor('primary-dark')
+  } else {
+    btnO.style.backgroundColor = boxColor('primary-dark')
+  }
+
+  btnX.addEventListener('click', () => {
+    player = 'x'
+    assignSymbol(player)
+    btnX.style.backgroundColor = boxColor('primary-dark')
+    btnO.style.backgroundColor = 'transparent'
+  })
+
+  btnO.addEventListener('click', () => {
+    player = 'o'
+    assignSymbol(player)
+    btnO.style.backgroundColor = boxColor('primary-dark')
+    btnX.style.backgroundColor = 'transparent'
+  })
+
+  modalSettings.showModal()
+})
+
+btnConfirm.addEventListener('click', () => {
+  modalSettings.close()
 })
