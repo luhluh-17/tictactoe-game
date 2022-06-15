@@ -100,7 +100,7 @@ loopBoardItem(container, (btn, i, j) => {
 
       if (turn > 4) {
         const result = checkWin(boardList[turn].state, symbol)
-        updateScore(result.hasWon, turn, player)
+        updateScore(result.hasWon, turn, player, symbol)
         if (result.hasWon) {
           pattern = result.pattern
           highlightPattern(container, pattern)
