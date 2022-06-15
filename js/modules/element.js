@@ -2,6 +2,7 @@ export const icon = (name) => {
   const icon = document.createElement('i')
   icon.classList.add('fa-solid')
   icon.classList.add(`fa-${name}`)
+  icon.classList.add('fa-fw')
   return icon
 }
 
