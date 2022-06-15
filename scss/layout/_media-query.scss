@@ -3,8 +3,7 @@ $smartphone-max: 425px;
 /* Smartphones */
 @media only screen and (max-width: $smartphone-max) {
   :root {
-    --box-size: var(--box-size-sm);
-    --box-size: var(--box-size-xs)
+    font-size: 12px;
   }
 }
 
