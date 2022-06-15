@@ -10,6 +10,7 @@ import {
   checkWin,
   createBoard,
   highlightPattern,
+  highlightTurn,
   toggleSymbol,
   updateScore,
 } from './modules/game.js'
@@ -91,6 +92,8 @@ loopBoardItem(container, (btn, i, j) => {
 
       board[i][j] = symbol
       btn.append(icon(symbol))
+      loopBoardItem(container, (btn) => btn.removeAttribute('style'))
+      btn.style.backgroundColor = boxColor('primary-dark')
 
       let turn = boardList.length
       const newBoard = new Board(deepCopy(board), turn, symbol, [i, j])
@@ -116,10 +119,8 @@ btnUndo.addEventListener('click', () => {
   const board = displayBoard(counter.decrement())
   symbol = toggleSymbol(board.symbol)
 
-  loopBoardItem(container, (btn) => {
-    btn.disabled = false
-    btn.removeAttribute('style')
-  })
+  loopBoardItem(container, (btn) => (btn.disabled = false))
+  highlightTurn(container, board)
 
   addIteminMoveList('undo', board.turn)
 })
@@ -127,6 +128,8 @@ btnUndo.addEventListener('click', () => {
 btnRedo.addEventListener('click', () => {
   const board = displayBoard(counter.increment(boardList.length - 1))
   symbol = toggleSymbol(board.symbol)
+
+  highlightTurn(container, board)
 
   if (counter.value() === boardList.length - 1) {
     if (pattern.length !== 0) {

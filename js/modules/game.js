@@ -41,6 +41,15 @@ export const highlightPattern = (container, pattern) => {
   })
 }
 
+export const highlightTurn = (container, board) => {
+  loopBoardItem(container, (btn, i, j) => {
+    btn.removeAttribute('style')
+    if (board.coordinate[0] === i && board.coordinate[1] === j) {
+      btn.style.backgroundColor = boxColor('primary-dark')
+    }
+  })
+}
+
 export const toggleSymbol = (char) => (char === 'x' ? 'o' : 'x')
 
 export const updateScore = (result, turn, player, winner) => {
