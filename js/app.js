@@ -46,6 +46,47 @@ let board = deepCopy(TEMPLATE)
 let counter = makeCounter()
 boardList.push(new Board(deepCopy(board)))
 
+showSettings()
+
+function showSettings() {
+  const options = document.querySelector('[data-option="symbol"]')
+  const player1 = document.querySelector('[data-player="1"]')
+  const player2 = document.querySelector('[data-player="2"]')
+
+  const btnX = options.firstElementChild
+  const btnO = options.lastElementChild
+
+  const assignSymbol = (player) => {
+    player1.innerHTML = ''
+    player1.append(icon(player))
+
+    player2.innerHTML = ''
+    player2.append(icon(toggleSymbol(player)))
+  }
+
+  if (player === 'x') {
+    btnX.style.backgroundColor = boxColor('primary-dark')
+  } else {
+    btnO.style.backgroundColor = boxColor('primary-dark')
+  }
+
+  btnX.addEventListener('click', () => {
+    player = 'x'
+    assignSymbol(player)
+    btnX.style.backgroundColor = boxColor('primary-dark')
+    btnO.style.backgroundColor = 'transparent'
+  })
+
+  btnO.addEventListener('click', () => {
+    player = 'o'
+    assignSymbol(player)
+    btnO.style.backgroundColor = boxColor('primary-dark')
+    btnX.style.backgroundColor = 'transparent'
+  })
+
+  modalSettings.showModal()
+}
+
 const removeUnusedState = () => {
   pattern = []
   boardList.splice(counter.value() + 1, boardList.length)
@@ -161,42 +202,7 @@ btnContinue.addEventListener('click', () => {
 })
 
 btnSettings.addEventListener('click', () => {
-  const options = document.querySelector('[data-option="symbol"]')
-  const player1 = document.querySelector('[data-player="1"]')
-  const player2 = document.querySelector('[data-player="2"]')
-
-  const btnX = options.firstElementChild
-  const btnO = options.lastElementChild
-
-  const assignSymbol = (player) => {
-    player1.innerHTML = ''
-    player1.append(icon(player))
-
-    player2.innerHTML = ''
-    player2.append(icon(toggleSymbol(player)))
-  }
-
-  if (player === 'x') {
-    btnX.style.backgroundColor = boxColor('primary-dark')
-  } else {
-    btnO.style.backgroundColor = boxColor('primary-dark')
-  }
-
-  btnX.addEventListener('click', () => {
-    player = 'x'
-    assignSymbol(player)
-    btnX.style.backgroundColor = boxColor('primary-dark')
-    btnO.style.backgroundColor = 'transparent'
-  })
-
-  btnO.addEventListener('click', () => {
-    player = 'o'
-    assignSymbol(player)
-    btnO.style.backgroundColor = boxColor('primary-dark')
-    btnX.style.backgroundColor = 'transparent'
-  })
-
-  modalSettings.showModal()
+  showSettings()
 })
 
 btnConfirm.addEventListener('click', () => {
