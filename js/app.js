@@ -120,8 +120,8 @@ const reset = () => {
       btn.disabled = false
       btn.removeAttribute('style')
     })
+    displayBoard(counter.changeValue(0))
   }
-  return counter.changeValue(0)
 }
 
 loopBoardItem(container, (btn, i, j) => {
@@ -182,7 +182,7 @@ btnRedo.addEventListener('click', () => {
   addIteminMoveList('redo', board.turn)
 })
 
-btnRestart.addEventListener('click', () => displayBoard(reset()))
+btnRestart.addEventListener('click', () => reset())
 
 btnHistory.addEventListener('click', () => {
   if (boardList.length === 1) {
@@ -206,5 +206,6 @@ btnSettings.addEventListener('click', () => {
 })
 
 btnConfirm.addEventListener('click', () => {
+  reset()
   modalSettings.close()
 })
