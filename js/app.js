@@ -36,8 +36,12 @@ const TEMPLATE = [
   ['', '', ''],
 ]
 
+const options = {
+  player: 'x',
+  opponent: 'person'
+}
+
 let degree = 0
-let player = 'x'
 let symbol = 'x'
 let pattern = []
 let moveList = []
@@ -49,12 +53,16 @@ boardList.push(new Board(deepCopy(board)))
 showSettings()
 
 function showSettings() {
-  const options = document.querySelector('[data-option="symbol"]')
   const player1 = document.querySelector('[data-player="1"]')
   const player2 = document.querySelector('[data-player="2"]')
 
-  const btnX = options.firstElementChild
-  const btnO = options.lastElementChild
+  const symbols = document.querySelector('[data-option="symbol"]')
+  const btnX = symbols.firstElementChild
+  const btnO = symbols.lastElementChild
+
+  const opponents = document.querySelector('[data-option="opponent"]')
+  const btnPerson = opponents.firstElementChild
+  const btnComputer = opponents.lastElementChild
 
   const assignSymbol = (player) => {
     player1.innerHTML = ''
@@ -64,24 +72,42 @@ function showSettings() {
     player2.append(icon(toggleSymbol(player)))
   }
 
-  if (player === 'x') {
+  if (options.player === 'x') {
     btnX.style.backgroundColor = boxColor('primary-dark')
   } else {
     btnO.style.backgroundColor = boxColor('primary-dark')
   }
 
+  if (options.opponent === 'person') {
+    btnPerson.style.backgroundColor = boxColor('primary-dark')
+  } else {
+    btnComputer.style.backgroundColor = boxColor('primary-dark')
+  }
+
   btnX.addEventListener('click', () => {
-    player = 'x'
-    assignSymbol(player)
+    options.player = 'x'
+    assignSymbol(options.player)
     btnX.style.backgroundColor = boxColor('primary-dark')
     btnO.style.backgroundColor = 'transparent'
   })
 
   btnO.addEventListener('click', () => {
-    player = 'o'
-    assignSymbol(player)
+    options.player = 'o'
+    assignSymbol(options.player)
     btnO.style.backgroundColor = boxColor('primary-dark')
     btnX.style.backgroundColor = 'transparent'
+  })
+
+  btnPerson.addEventListener('click', () => {
+    options.opponent = 'person'
+    btnPerson.style.backgroundColor = boxColor('primary-dark')
+    btnComputer.style.backgroundColor = 'transparent'
+  })
+
+  btnComputer.addEventListener('click', () => {
+    options.opponent = 'computer'
+    btnComputer.style.backgroundColor = boxColor('primary-dark')
+    btnPerson.style.backgroundColor = 'transparent'
   })
 
   modalSettings.showModal()
@@ -144,7 +170,7 @@ loopBoardItem(container, (btn, i, j) => {
 
       if (turn > 4) {
         const result = checkWin(boardList[turn].state, symbol)
-        updateScore(result.hasWon, turn, player, symbol)
+        updateScore(result.hasWon, turn, options.player, symbol)
         if (result.hasWon) {
           pattern = result.pattern
           highlightPattern(container, pattern)
