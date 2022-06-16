@@ -1,2 +1,11 @@
-@use '../scss/' as *;
-
+@use 'abstracts/variables';
+@use 'base/reset';
+@use 'base/typography';
+@use 'themes/dark';
+@use 'utils/display';
+@use 'components/box';
+@use 'components/button';
+@use 'components/modal';
+@use 'components/scrollbar';
+@use 'layout/main';
+@use 'layout/media-query';
