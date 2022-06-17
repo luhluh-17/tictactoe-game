@@ -30,8 +30,7 @@
     </section>
     <section class="flex-row">
       <div class="flex-col">
-        <p><span data-player="1"><i class="fa-solid fa-x fa-fw"></i></span> Player
-        </p>
+        <p><span data-player><i class="fa-solid fa-x fa-fw"></i></span> Player</p>
         <h4 data-score="1">0</h4>
       </div>
       <div class="flex-col">
@@ -39,7 +38,7 @@
         <h4 data-score="draw">0</h4>
       </div>
       <div class="flex-col">
-        <p><span data-player="2"><i class="fa-solid fa-o fa-fw"></i></span> Player</p>
+        <p><span data-player><i class="fa-solid fa-o fa-fw"></i></span> Player</p>
         <h4 data-score="2">0</h4>
       </div>
     </section>
@@ -85,22 +84,22 @@
     <div class=" flex-col">
       <section class="flex-col">
         <p>Choose Your Symbol</p>
-        <div class="flex-row" data-option="symbol">
-          <button class="btn-box btn-sm f1 borderless flex">
+        <div class="flex-row">
+          <button class="btn-box btn-sm borderless flex" data-option="symbol">
             <i class="fa-solid fa-x"></i>
           </button>
-          <button class="btn-box btn-sm borderless flex">
+          <button class="btn-box btn-sm borderless flex" data-option="symbol">
             <i class="fa-solid fa-o"></i>
           </button>
         </div>
       </section>
       <section class="flex-col">
         <p>Play Against</p>
-        <div class="flex-row" data-option="opponent">
-          <button class="btn-box btn-sm f1 borderless flex">
+        <div class="flex-row">
+          <button class="btn-box btn-sm borderless flex" data-option="opponent">
             <i class="fa-solid fa-user"></i>
           </button>
-          <button class="btn-box btn-sm borderless flex">
+          <button class="btn-box btn-sm borderless flex" data-option="opponent">
             <i class="fa-solid fa-desktop"></i>
           </button>
         </div>

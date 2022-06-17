@@ -1,34 +1,27 @@
 import { Board } from './classes/board.js'
-import { icon, imageText, unorderedList } from './modules/element.js'
+import * as dialog from './modules/dialog.js'
+import { icon } from './modules/element.js'
 import {
-  boxColor,
   deepCopy,
-  loopBoardItem,
+  disableAllBox,
+  getAllBox,
   makeCounter,
 } from './modules/helper.js'
 import {
   checkWin,
-  createBoard,
+  displayBoard,
   highlightPattern,
   highlightTurn,
   toggleSymbol,
   updateScore,
 } from './modules/game.js'
 
-const container = document.querySelector('[data-board]')
-
-const modalHistory = document.querySelector('[data-modal="history"]')
-const btnHistory = document.querySelector('[data-btn="history"]')
-const contentHistory = document.querySelector('[data-content="history"]')
-const btnContinue = document.querySelector('[data-btn="continue"]')
-
-const modalSettings = document.querySelector('[data-modal="settings"]')
-const btnSettings = document.querySelector('[data-btn="settings"]')
-const btnConfirm = document.querySelector('[data-btn="confirm"]')
-
 const btnUndo = document.querySelector('[data-btn="undo"]')
-const btnRestart = document.querySelector('[data-btn="restart"]')
 const btnRedo = document.querySelector('[data-btn="redo"]')
+const btnRestart = document.querySelector('[data-btn="restart"]')
+
+const btnHistory = document.querySelector('[data-btn="history"]')
+const btnSettings = document.querySelector('[data-btn="settings"]')
 
 const TEMPLATE = [
   ['', '', ''],
@@ -36,92 +29,76 @@ const TEMPLATE = [
   ['', '', ''],
 ]
 
-const options = {
-  player: 'x',
-  opponent: 'person'
-}
-
-let degree = 0
+const boxList = getAllBox()
 let symbol = 'x'
 let pattern = []
 let moveList = []
 let boardList = []
-let board = deepCopy(TEMPLATE)
-let counter = makeCounter()
-boardList.push(new Board(deepCopy(board)))
+let boardState = deepCopy(TEMPLATE)
+let counter = makeCounter('turn')
+let degree = makeCounter('rotate')
+boardList.push(new Board(deepCopy(boardState)))
 
-showSettings()
+const mainFunction = (coordinates) => {
+  removeUnusedState()
 
-function showSettings() {
-  const player1 = document.querySelector('[data-player="1"]')
-  const player2 = document.querySelector('[data-player="2"]')
+  const i = coordinates[0]
+  const j = coordinates[1]
+  boardState[i][j] = symbol
+  boxList[i][j].append(icon(symbol))
+  highlightTurn([i, j], boardList.at(-1).coordinate)
 
-  const symbols = document.querySelector('[data-option="symbol"]')
-  const btnX = symbols.firstElementChild
-  const btnO = symbols.lastElementChild
+  let turn = boardList.length
+  const board = new Board(deepCopy(boardState), turn, symbol, [i, j])
+  turn = counter.changeValue(boardList.push(board) - 1)
+  moveList.push(board.toString())
 
-  const opponents = document.querySelector('[data-option="opponent"]')
-  const btnPerson = opponents.firstElementChild
-  const btnComputer = opponents.lastElementChild
+  checkStatus(turn)
 
-  const assignSymbol = (player) => {
-    player1.innerHTML = ''
-    player1.append(icon(player))
-
-    player2.innerHTML = ''
-    player2.append(icon(toggleSymbol(player)))
-  }
-
-  if (options.player === 'x') {
-    btnX.style.backgroundColor = boxColor('primary-dark')
-  } else {
-    btnO.style.backgroundColor = boxColor('primary-dark')
-  }
-
-  if (options.opponent === 'person') {
-    btnPerson.style.backgroundColor = boxColor('primary-dark')
-  } else {
-    btnComputer.style.backgroundColor = boxColor('primary-dark')
-  }
-
-  btnX.addEventListener('click', () => {
-    options.player = 'x'
-    assignSymbol(options.player)
-    btnX.style.backgroundColor = boxColor('primary-dark')
-    btnO.style.backgroundColor = 'transparent'
-  })
-
-  btnO.addEventListener('click', () => {
-    options.player = 'o'
-    assignSymbol(options.player)
-    btnO.style.backgroundColor = boxColor('primary-dark')
-    btnX.style.backgroundColor = 'transparent'
-  })
-
-  btnPerson.addEventListener('click', () => {
-    options.opponent = 'person'
-    btnPerson.style.backgroundColor = boxColor('primary-dark')
-    btnComputer.style.backgroundColor = 'transparent'
-  })
-
-  btnComputer.addEventListener('click', () => {
-    options.opponent = 'computer'
-    btnComputer.style.backgroundColor = boxColor('primary-dark')
-    btnPerson.style.backgroundColor = 'transparent'
-  })
-
-  modalSettings.showModal()
+  symbol = toggleSymbol(symbol)
 }
 
 const removeUnusedState = () => {
-  pattern = []
-  boardList.splice(counter.value() + 1, boardList.length)
-  board = deepCopy(boardList[boardList.length - 1].state)
+  if (counter.value() < boardList.length - 1) {
+    pattern = []
+    boardList.splice(counter.value() + 1, boardList.length)
+    boardState = deepCopy(boardList.at(-1).state)
+  }
 }
 
-const displayBoard = (index) => {
-  createBoard(container, boardList[index].state)
-  return boardList[index]
+const checkStatus = (turn) => {
+  if (turn > 4) {
+    const result = checkWin(boardList[turn].state, symbol)
+    updateScore(result.hasWon, turn, dialog.options.player, symbol)
+    if (result.hasWon) {
+      pattern = result.pattern
+      highlightPattern(pattern)
+      disableAllBox(true)
+    }
+  }
+}
+
+const triggerEvent = (event, callbackfn) => {
+  let index = 0
+  if (event === 'undo') {
+    index = counter.decrement()
+  } else if (event === 'redo') {
+    index = counter.increment(boardList.at(-1).turn)
+  }
+
+  const board = boardList[index]
+  displayBoard(board.state)
+  symbol = toggleSymbol(board.symbol)
+
+  callbackfn()
+
+  const calculate = {
+    undo: () => index + 1,
+    redo: () => index - 1,
+  }
+
+  highlightTurn(board.coordinate, boardList.at(calculate[event]()).coordinate)
+  addIteminMoveList(event, board.turn)
 }
 
 const addIteminMoveList = (action, turn) => {
@@ -136,102 +113,49 @@ const addIteminMoveList = (action, turn) => {
 
 const reset = () => {
   if (boardList.length > 1) {
-    container.style.transform = `rotate(${(degree += 360)}deg)`
+    const container = document.querySelector('[data-board]')
+    container.style.transform = `rotate(${degree()}deg)`
     pattern = []
     moveList = []
     boardList = []
-    board = deepCopy(TEMPLATE)
-    boardList.push(new Board(deepCopy(board)))
-    loopBoardItem(container, (btn) => {
-      btn.disabled = false
-      btn.removeAttribute('style')
+    boardState = deepCopy(TEMPLATE)
+    boardList.push(new Board(deepCopy(boardState)))
+    boxList.flat().forEach((box) => {
+      box.disabled = false
+      box.removeAttribute('style')
     })
-    displayBoard(counter.changeValue(0))
+
+    displayBoard(boardList[counter.changeValue(0)].state)
   }
 }
 
-loopBoardItem(container, (btn, i, j) => {
-  btn.addEventListener('click', () => {
-    if (!btn.hasChildNodes()) {
-      if (counter.value() < boardList.length - 1) {
-        removeUnusedState()
+boxList.forEach((parent, i) => {
+  parent.forEach((box, j) => {
+    box.addEventListener('click', () => {
+      if (!box.hasChildNodes()) {
+        mainFunction([i, j])
       }
-
-      board[i][j] = symbol
-      btn.append(icon(symbol))
-      loopBoardItem(container, (btn) => btn.removeAttribute('style'))
-      btn.style.backgroundColor = boxColor('primary-dark')
-
-      let turn = boardList.length
-      const newBoard = new Board(deepCopy(board), turn, symbol, [i, j])
-      moveList.push(newBoard.toString())
-
-      turn = counter.changeValue(boardList.push(newBoard) - 1)
-
-      if (turn > 4) {
-        const result = checkWin(boardList[turn].state, symbol)
-        updateScore(result.hasWon, turn, options.player, symbol)
-        if (result.hasWon) {
-          pattern = result.pattern
-          highlightPattern(container, pattern)
-          loopBoardItem(container, (btn) => (btn.disabled = true))
-        }
-      }
-      symbol = toggleSymbol(symbol)
-    }
+    })
   })
 })
 
 btnUndo.addEventListener('click', () => {
-  const board = displayBoard(counter.decrement())
-  symbol = toggleSymbol(board.symbol)
-
-  loopBoardItem(container, (btn) => (btn.disabled = false))
-  highlightTurn(container, board)
-
-  addIteminMoveList('undo', board.turn)
+  triggerEvent('undo', () => disableAllBox(false))
 })
 
 btnRedo.addEventListener('click', () => {
-  const board = displayBoard(counter.increment(boardList.length - 1))
-  symbol = toggleSymbol(board.symbol)
-
-  highlightTurn(container, board)
-
-  if (counter.value() === boardList.length - 1) {
-    if (pattern.length !== 0) {
-      highlightPattern(container, pattern)
-      loopBoardItem(container, (btn) => (btn.disabled = true))
+  triggerEvent('redo', () => {
+    if (counter.value() === boardList.at(-1).turn) {
+      if (pattern.length !== 0) {
+        highlightPattern(pattern)
+        disableAllBox(true)
+      }
     }
-  }
-
-  addIteminMoveList('redo', board.turn)
+  })
 })
 
 btnRestart.addEventListener('click', () => reset())
 
-btnHistory.addEventListener('click', () => {
-  if (boardList.length === 1) {
-    const src = 'assets/empty.png'
-    const text = 'Oops! Nothing to show here'
-    contentHistory.append(imageText(src, text))
-  } else {
-    contentHistory.append(unorderedList(moveList))
-  }
+btnHistory.addEventListener('click', () => dialog.history(moveList))
 
-  modalHistory.showModal()
-})
-
-btnContinue.addEventListener('click', () => {
-  contentHistory.innerHTML = ''
-  modalHistory.close()
-})
-
-btnSettings.addEventListener('click', () => {
-  showSettings()
-})
-
-btnConfirm.addEventListener('click', () => {
-  reset()
-  modalSettings.close()
-})
+btnSettings.addEventListener('click', () => dialog.settings())

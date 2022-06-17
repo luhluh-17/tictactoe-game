@@ -1,5 +1,7 @@
 import { icon } from './element.js'
-import { boxColor, loopBoardItem } from './helper.js'
+import { boxColor, getAllBox } from './helper.js'
+
+const boxList = getAllBox()
 
 export const checkWin = (array, symbol) => {
   const patterns = [
@@ -21,46 +23,51 @@ export const checkWin = (array, symbol) => {
   return { hasWon, pattern }
 }
 
-export const createBoard = (container, board) => {
-  loopBoardItem(container, (btn, i, j) => {
-    btn.innerHTML = ''
-    if (board[i][j].length === 1) {
-      btn.append(icon(board[i][j]))
-    }
+export const displayBoard = (board) => {
+  boxList.forEach((parent, i) => {
+    parent.forEach((box, j) => {
+      box.innerHTML = ''
+      if (board[i][j].length === 1) {
+        box.append(icon(board[i][j]))
+      }
+    })
   })
 }
 
-export const highlightPattern = (container, pattern) => {
-  let index = 0
-  loopBoardItem(container, (btn) => {
+export const highlightPattern = (pattern) => {
+  boxList.flat().forEach((box, index) => {
     if (pattern.includes(index)) {
-      btn.style.backgroundColor = boxColor('primary-dark')
-      btn.firstChild.classList.add('fa-beat')
+      box.style.backgroundColor = boxColor('primary-dark')
+      box.firstChild.classList.add('fa-beat')
     }
-    index++
   })
 }
 
-export const highlightTurn = (container, board) => {
-  loopBoardItem(container, (btn, i, j) => {
-    btn.removeAttribute('style')
-    if (board.coordinate[0] === i && board.coordinate[1] === j) {
-      btn.style.backgroundColor = boxColor('primary-dark')
-    }
-  })
+export const highlightTurn = (next, prev) => {
+  if (next.length !== 0) {
+    const i = next[0]
+    const j = next[1]
+    boxList[i][j].style.backgroundColor = boxColor('primary-dark')
+  }
+
+  if (prev.length !== 0) {
+    const x = prev[0]
+    const y = prev[1]
+    boxList[x][y].removeAttribute('style')
+  }
 }
 
 export const toggleSymbol = (char) => (char === 'x' ? 'o' : 'x')
 
-export const updateScore = (result, turn, player, winner) => {
+export const updateScore = (result, turn, player, symbol) => {
   const incrementScore = (value) => {
     const score = document.querySelector(`[data-score="${value}"]`)
     score.textContent = parseInt(score.textContent) + 1
   }
 
-  if (result && player === winner) {
+  if (result && player === symbol) {
     incrementScore('1')
-  } else if (result && player !== winner) {
+  } else if (result && player !== symbol) {
     incrementScore('2')
   } else if (!result && turn === 9) {
     incrementScore('draw')
