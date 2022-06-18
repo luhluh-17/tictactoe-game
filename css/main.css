@@ -211,8 +211,8 @@ button.btn-box {
 }
 
 .btn-box {
-  min-height: var(--box-size);
-  min-width: var(--box-size);
+  height: var(--box-size);
+  width: var(--box-size);
   justify-content: center;
   transition: background-color 0.5s;
 }
@@ -220,8 +220,8 @@ button.btn-box {
   border: 0;
 }
 .btn-box.btn-sm {
-  min-height: var(--box-size-sm);
-  max-width: var(--box-size-sm);
+  height: var(--box-size-sm);
+  width: var(--box-size-sm);
 }
 
 .btn-round {
@@ -304,7 +304,6 @@ main section {
 @media (min-width: 426px) {
   :root {
     --box-size: 9rem;
-    --box-size-sm: 7rem;
   }
 }
 
