@@ -14,8 +14,8 @@
 
 .btn-box {
   @extend .btn;
-  height: var(--box-size);
-  width: var(--box-size);
+  min-height: var(--box-size);
+  min-width: var(--box-size);
   justify-content: center;
   transition: background-color 0.5s;
 
@@ -24,8 +24,8 @@
   }
 
   &.btn-sm {
-    height: var(--box-size-sm);
-    width: var(--box-size-sm);
+    min-height: var(--box-size-sm);
+    max-width: var(--box-size-sm);
   }
 }
 

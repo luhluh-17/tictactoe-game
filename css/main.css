@@ -14,7 +14,6 @@
   --box-hover-color: #303030;
   --box-size: 7.5rem;
   --box-size-sm: 5.5rem;
-  --box-size-xs: 3.5rem;
   --box-outline: 0.2rem;
   --section-width: calc(var(--box-size) * 3);
   --modal-width: calc(var(--box-size) * 2.75);
@@ -212,8 +211,8 @@ button.btn-box {
 }
 
 .btn-box {
-  height: var(--box-size);
-  width: var(--box-size);
+  min-height: var(--box-size);
+  min-width: var(--box-size);
   justify-content: center;
   transition: background-color 0.5s;
 }
@@ -221,8 +220,8 @@ button.btn-box {
   border: 0;
 }
 .btn-box.btn-sm {
-  height: var(--box-size-sm);
-  width: var(--box-size-sm);
+  min-height: var(--box-size-sm);
+  max-width: var(--box-size-sm);
 }
 
 .btn-round {
@@ -292,6 +291,7 @@ main {
   padding: 1rem;
   height: 100vh;
   width: 100vw;
+  overflow: hidden;
 }
 main section {
   width: var(--section-width);
@@ -301,10 +301,10 @@ main section {
   transition: transform 1.5s;
 }
 
-/* Smartphones */
-@media only screen and (max-width: 425px) {
+@media (min-width: 426px) {
   :root {
-    font-size: 12px;
+    --box-size: 9rem;
+    --box-size-sm: 7rem;
   }
 }
 

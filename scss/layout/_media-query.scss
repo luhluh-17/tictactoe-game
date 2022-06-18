@@ -1,9 +1,9 @@
-$smartphone-max: 425px;
+$tablet-min: 426px;
 
-/* Smartphones */
-@media only screen and (max-width: $smartphone-max) {
+@media (min-width: $tablet-min) {
   :root {
-    font-size: 12px;
+    --box-size: 9rem;
+    --box-size-sm: 7rem;
   }
 }
 
