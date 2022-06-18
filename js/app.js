@@ -10,8 +10,7 @@ import {
 import {
   checkWin,
   displayBoard,
-  highlightPattern,
-  highlightTurn,
+  highlight,
   toggleSymbol,
   updateScore,
 } from './modules/game.js'
@@ -32,7 +31,7 @@ const TEMPLATE = [
 ]
 
 const boxList = getAllBox()
-let isActive = true
+let isGameActive = true
 let symbol = 'x'
 let pattern = []
 let moveList = []
@@ -41,6 +40,7 @@ let boardState = deepCopy(TEMPLATE)
 let counter = makeCounter('turn')
 let degree = makeCounter('rotate')
 boardList.push(new Board(deepCopy(boardState)))
+dialog.settings()
 
 const mainFunction = (coordinates) => {
   removeUnusedState()
@@ -49,7 +49,7 @@ const mainFunction = (coordinates) => {
   const j = coordinates[1]
   boardState[i][j] = symbol
   boxList[i][j].append(icon(symbol))
-  highlightTurn([i, j], boardList.at(-1).coordinate)
+  highlight.turn([i, j], boardList.at(-1).coordinate)
 
   let turn = boardList.length
   const board = new Board(deepCopy(boardState), turn, symbol, [i, j])
@@ -74,22 +74,24 @@ const removeUnusedState = () => {
 const checkStatus = (turn) => {
   if (turn > 4) {
     const result = checkWin(boardList[turn].state, symbol)
-    updateScore(result.hasWon, turn, dialog.options.player, symbol)
 
     if (result.hasWon) {
       disableAllBox(true)
       pattern = result.pattern
-      highlightPattern(pattern)
-      isActive = false
-    } else if (turn === 9 && !result.hasWon) {
-      isActive = false
+      highlight.pattern(pattern)
+      isGameActive = false
+      updateScore(result.hasWon, dialog.options.player, symbol)
+    } else if (!result.hasWon && turn === 9) {
+      isGameActive = false
+      updateScore(result.hasWon)
+      highlight.board()
     }
   }
 }
 
 const playVsComputer = () => {
   if (
-    isActive &&
+    isGameActive &&
     dialog.options.opponent === 'computer' &&
     dialog.options.playersymbol !== symbol
   ) {
@@ -102,7 +104,7 @@ const playVsComputer = () => {
       const j = coordinates[1]
       boardState[i][j] = symbol
       boxList[i][j].append(icon(symbol))
-      highlightTurn([i, j], boardList.at(-1).coordinate)
+      highlight.turn([i, j], boardList.at(-1).coordinate)
 
       let turn = boardList.length
       const board = new Board(deepCopy(boardState), turn, symbol, [i, j])
@@ -135,7 +137,12 @@ const triggerEvent = (event, callbackfn) => {
     redo: () => index - 1,
   }
 
-  highlightTurn(board.coordinate, boardList.at(calculate[event]()).coordinate)
+  if (counter.value() === 9 && pattern.length === 0) {
+    highlight.board()
+  } else {
+    const index = calculate[event]()
+    highlight.turn(board.coordinate, boardList.at(index).coordinate)
+  }
   addIteminMoveList(event, board.turn)
 }
 
@@ -149,24 +156,25 @@ const addIteminMoveList = (action, turn) => {
 
 const reset = () => {
   if (boardList.length > 1) {
-    const container = document.querySelector('[data-board]')
-    container.style.transform = `rotate(${degree()}deg)`
-
     symbol = 'x'
-    isActive = true
+    isGameActive = true
     pattern = []
     moveList = []
     boardList = []
     boardState = deepCopy(TEMPLATE)
     boardList.push(new Board(deepCopy(boardState)))
-    boxList.flat().forEach((box) => (box.disabled = true))
+    displayBoard(boardList[counter.changeValue(0)].state)
+    const container = document.querySelector('[data-board]')
+    container.style.transform = `rotate(${degree()}deg)`
+
+    boxList.flat().forEach((box) => {
+      box.disabled = true
+      box.removeAttribute('style')
+    })
 
     setTimeout(() => {
       boxList.flat().forEach((box) => (box.disabled = false))
     }, 1500)
-
-    displayBoard(boardList[counter.changeValue(0)].state)
-    boxList.flat().forEach((box) => box.removeAttribute('style'))
   }
 }
 
@@ -191,7 +199,7 @@ btnRedo.addEventListener('click', () => {
   triggerEvent('redo', () => {
     if (counter.value() === boardList.at(-1).turn) {
       if (pattern.length !== 0) {
-        highlightPattern(pattern)
+        highlight.pattern(pattern)
         disableAllBox(true)
       }
     }

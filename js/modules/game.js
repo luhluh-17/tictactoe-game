@@ -34,32 +34,38 @@ export const displayBoard = (board) => {
   })
 }
 
-export const highlightPattern = (pattern) => {
-  boxList.flat().forEach((box, index) => {
-    if (pattern.includes(index)) {
+export const highlight = {
+  board: () => {
+    boxList.flat().forEach((box) => {
       box.style.backgroundColor = boxColor('primary-dark')
-      box.firstChild.classList.add('fa-beat')
+    })
+  },
+  pattern: (pattern) => {
+    boxList.flat().forEach((box, index) => {
+      if (pattern.includes(index)) {
+        box.style.backgroundColor = boxColor('primary-dark')
+        box.firstChild.classList.add('fa-beat')
+      }
+    })
+  },
+  turn: (next, prev) => {
+    if (next.length !== 0) {
+      const i = next[0]
+      const j = next[1]
+      boxList[i][j].style.backgroundColor = boxColor('primary-dark')
     }
-  })
-}
-
-export const highlightTurn = (next, prev) => {
-  if (next.length !== 0) {
-    const i = next[0]
-    const j = next[1]
-    boxList[i][j].style.backgroundColor = boxColor('primary-dark')
-  }
-
-  if (prev.length !== 0) {
-    const x = prev[0]
-    const y = prev[1]
-    boxList[x][y].removeAttribute('style')
-  }
-}
+  
+    if (prev.length !== 0) {
+      const x = prev[0]
+      const y = prev[1]
+      boxList[x][y].removeAttribute('style')
+    }
+  },
+} 
 
 export const toggleSymbol = (char) => (char === 'x' ? 'o' : 'x')
 
-export const updateScore = (result, turn, player, symbol) => {
+export const updateScore = (result, symbol='', player='') => {
   const incrementScore = (value) => {
     const score = document.querySelector(`[data-score="${value}"]`)
     score.textContent = parseInt(score.textContent) + 1
@@ -69,7 +75,7 @@ export const updateScore = (result, turn, player, symbol) => {
     incrementScore('1')
   } else if (result && player !== symbol) {
     incrementScore('2')
-  } else if (!result && turn === 9) {
+  } else {
     incrementScore('draw')
   }
 }

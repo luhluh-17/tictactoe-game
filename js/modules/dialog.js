@@ -18,7 +18,7 @@ const btnComputer = opponents[1]
 
 export const options = {
   player: 'x',
-  opponent: 'computer',
+  opponent: 'person',
 }
 
 export const history = (moveList) => {
