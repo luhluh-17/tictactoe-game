@@ -7,7 +7,6 @@ const contentHistory = document.querySelector('[data-content="history"]')
 const btnContinue = document.querySelector('[data-btn="continue"]')
 
 const modalSettings = document.querySelector('[data-modal="settings"]')
-const btnConfirm = document.querySelector('[data-btn="confirm"]')
 
 const symbols = document.querySelectorAll('[data-option="symbol"]')
 const opponents = document.querySelectorAll('[data-option="opponent"]')
@@ -19,7 +18,7 @@ const btnComputer = opponents[1]
 
 export const options = {
   player: 'x',
-  opponent: 'person',
+  opponent: 'computer',
 }
 
 export const history = (moveList) => {
@@ -49,7 +48,7 @@ export const settings = () => {
   modalSettings.showModal()
 }
 
-const toggle = (choices, index, value) => {
+const toggle = (choices, value) => {
   if (choices[0].getAttribute('data-option') === 'symbol') {
     const players = document.querySelectorAll('[data-player]')
     players[0].innerHTML = ''
@@ -63,10 +62,10 @@ const toggle = (choices, index, value) => {
     options.opponent = value
   }
 
-  if (index === 0) {
+  if (value === 'x' || value === 'person') {
     choices[0].style.backgroundColor = boxColor('primary-dark')
     choices[1].style.backgroundColor = 'transparent'
-  } else if (index === 1) {
+  } else {
     choices[1].style.backgroundColor = boxColor('primary-dark')
     choices[0].style.backgroundColor = 'transparent'
   }
@@ -77,12 +76,10 @@ btnContinue.addEventListener('click', () => {
   modalHistory.close()
 })
 
-btnX.addEventListener('click', () => toggle(symbols, 0, 'x'))
+btnX.addEventListener('click', () => toggle(symbols, 'x'))
 
-btnO.addEventListener('click', () => toggle(symbols, 1, 'o'))
+btnO.addEventListener('click', () => toggle(symbols, 'o'))
 
-btnPerson.addEventListener('click', () => toggle(opponents, 0, 'person'))
+btnPerson.addEventListener('click', () => toggle(opponents, 'person'))
 
-btnComputer.addEventListener('click', () => toggle(opponents, 1, 'computer'))
-
-btnConfirm.addEventListener('click', () => modalSettings.close())
+btnComputer.addEventListener('click', () => toggle(opponents, 'computer'))

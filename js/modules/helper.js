@@ -13,7 +13,6 @@ export const disableAllBox = (bool) => {
         box.disabled = bool
       } else {
         box.disabled = bool
-        box.removeAttribute('style')
       }
     })
 }
@@ -27,8 +26,8 @@ export const makeCounter = (name) => {
       decrement: () => (count = count > 0 ? --count : count),
       value: () => count,
     }
-  } else if(name === 'rotate'){
-    return () => count += 360
+  } else if (name === 'rotate') {
+    return () => (count += 360)
   }
 }
 

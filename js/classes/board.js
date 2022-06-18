@@ -19,8 +19,8 @@ export class Board {
   }
 
   static getAvailableList(array) {
-    return Object.entries(this.coordinateList).filter(
-      (item) => !this.getOccupiedList(array).includes(item[0])
+    return Object.keys(this.coordinateList).filter(
+      (item) => !this.getOccupiedList(array).includes(item)
     )
   }
 
