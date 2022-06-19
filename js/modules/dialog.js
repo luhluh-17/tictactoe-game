@@ -16,9 +16,14 @@ const btnO = symbols[1]
 const btnPerson = opponents[0]
 const btnComputer = opponents[1]
 
+export const OPPONENT = {
+  PERSON: 'person',
+  COMPUTER: 'computer',
+}
+
 export const options = {
   player: 'x',
-  opponent: 'person',
+  opponent: OPPONENT.PERSON,
 }
 
 export const history = (moveList) => {
@@ -40,7 +45,7 @@ export const settings = () => {
     btnO.style.backgroundColor = boxColor('primary-dark')
   }
 
-  if (options.opponent === 'person') {
+  if (options.opponent === OPPONENT.PERSON) {
     btnPerson.style.backgroundColor = boxColor('primary-dark')
   } else {
     btnComputer.style.backgroundColor = boxColor('primary-dark')
@@ -62,7 +67,7 @@ const toggle = (choices, value) => {
     options.opponent = value
   }
 
-  if (value === 'x' || value === 'person') {
+  if (value === 'x' || value === OPPONENT.PERSON) {
     choices[0].style.backgroundColor = boxColor('primary-dark')
     choices[1].style.backgroundColor = 'transparent'
   } else {
@@ -80,6 +85,8 @@ btnX.addEventListener('click', () => toggle(symbols, 'x'))
 
 btnO.addEventListener('click', () => toggle(symbols, 'o'))
 
-btnPerson.addEventListener('click', () => toggle(opponents, 'person'))
+btnPerson.addEventListener('click', () => toggle(opponents, OPPONENT.PERSON))
 
-btnComputer.addEventListener('click', () => toggle(opponents, 'computer'))
+btnComputer.addEventListener('click', () =>
+  toggle(opponents, OPPONENT.COMPUTER)
+)

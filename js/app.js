@@ -43,8 +43,6 @@ boardList.push(new Board(deepCopy(boardState)))
 dialog.settings()
 
 const mainFunction = (coordinates) => {
-  removeUnusedState()
-
   const i = coordinates[0]
   const j = coordinates[1]
   boardState[i][j] = symbol
@@ -59,8 +57,6 @@ const mainFunction = (coordinates) => {
   checkStatus(turn)
 
   symbol = toggleSymbol(symbol)
-
-  playVsComputer()
 }
 
 const removeUnusedState = () => {
@@ -92,29 +88,14 @@ const checkStatus = (turn) => {
 const playVsComputer = () => {
   if (
     isGameActive &&
-    dialog.options.opponent === 'computer' &&
-    dialog.options.playersymbol !== symbol
+    dialog.options.opponent === dialog.OPPONENT.COMPUTER &&
+    dialog.options.player !== symbol
   ) {
     const array = Board.getAvailableList(boardList)
     const random = Math.floor(Math.random() * array.length)
     const coordinates = JSON.parse(array[random])
 
-    setTimeout(() => {
-      const i = coordinates[0]
-      const j = coordinates[1]
-      boardState[i][j] = symbol
-      boxList[i][j].append(icon(symbol))
-      highlight.turn([i, j], boardList.at(-1).coordinate)
-
-      let turn = boardList.length
-      const board = new Board(deepCopy(boardState), turn, symbol, [i, j])
-      turn = counter.changeValue(boardList.push(board) - 1)
-      moveList.push(board.toString())
-
-      checkStatus(turn)
-
-      symbol = toggleSymbol(symbol)
-    }, 100)
+    setTimeout(() => mainFunction(coordinates), 100)
   }
 }
 
@@ -155,8 +136,8 @@ const addIteminMoveList = (action, turn) => {
 }
 
 const reset = () => {
+  let delay = 100
   if (boardList.length > 1) {
-    symbol = 'x'
     isGameActive = true
     pattern = []
     moveList = []
@@ -171,18 +152,22 @@ const reset = () => {
       box.disabled = true
       box.removeAttribute('style')
     })
-
-    setTimeout(() => {
-      boxList.flat().forEach((box) => (box.disabled = false))
-    }, 1500)
+    delay = 1000
   }
+
+  setTimeout(() => {
+    boxList.flat().forEach((box) => (box.disabled = false))
+    playVsComputer()
+  }, delay)
 }
 
 boxList.forEach((parent, i) => {
   parent.forEach((box, j) => {
     box.addEventListener('click', () => {
       if (!box.hasChildNodes()) {
+        removeUnusedState()
         mainFunction([i, j])
+        playVsComputer()
       }
     })
   })
