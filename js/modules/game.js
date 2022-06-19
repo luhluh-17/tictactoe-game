@@ -45,6 +45,7 @@ export const highlight = {
       if (pattern.includes(index)) {
         box.style.backgroundColor = boxColor('primary-dark')
         box.firstChild.classList.add('fa-beat')
+        box.firstChild.style = '--fa-animation-delay: 200ms'
       }
     })
   },
@@ -54,18 +55,18 @@ export const highlight = {
       const j = next[1]
       boxList[i][j].style.backgroundColor = boxColor('primary-dark')
     }
-  
+
     if (prev.length !== 0) {
       const x = prev[0]
       const y = prev[1]
       boxList[x][y].removeAttribute('style')
     }
   },
-} 
+}
 
 export const toggleSymbol = (char) => (char === 'x' ? 'o' : 'x')
 
-export const updateScore = (result, symbol='', player='') => {
+export const updateScore = (result, symbol = '', player = '') => {
   const incrementScore = (value) => {
     const score = document.querySelector(`[data-score="${value}"]`)
     score.textContent = parseInt(score.textContent) + 1

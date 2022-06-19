@@ -88,8 +88,8 @@ const checkStatus = (turn) => {
 const playVsComputer = () => {
   if (
     isGameActive &&
-    dialog.options.opponent === dialog.OPPONENT.COMPUTER &&
-    dialog.options.player !== symbol
+    dialog.options.player !== symbol &&
+    dialog.options.opponent === dialog.OPPONENT.COMPUTER
   ) {
     const array = Board.getAvailableList(boardList)
     const random = Math.floor(Math.random() * array.length)
@@ -100,31 +100,45 @@ const playVsComputer = () => {
 }
 
 const triggerEvent = (event, callbackfn) => {
-  let index = 0
-  if (event === 'undo') {
-    index = counter.decrement()
-  } else if (event === 'redo') {
-    index = counter.increment(boardList.at(-1).turn)
+  const customEvent = () => {
+    if (event === 'undo') {
+      counter.decrement()
+    } else if (event === 'redo') {
+      counter.increment(boardList.at(-1).turn)
+    }
+    const board = boardList[counter.value()]
+    displayBoard(board.state)
+    symbol = toggleSymbol(board.symbol)
+
+    callbackfn()
+
+    const calculate = {
+      undo: () => counter.value() + 1,
+      redo: () => counter.value() - 1,
+    }
+
+    if (counter.value() === 9 && pattern.length === 0) {
+      highlight.board()
+    } else {
+      const index = calculate[event]()
+      highlight.turn(board.coordinate, boardList.at(index).coordinate)
+    }
+    addIteminMoveList(event, board.turn)
   }
 
-  const board = boardList[index]
-  displayBoard(board.state)
-  symbol = toggleSymbol(board.symbol)
-
-  callbackfn()
-
-  const calculate = {
-    undo: () => index + 1,
-    redo: () => index - 1,
-  }
-
-  if (counter.value() === 9 && pattern.length === 0) {
-    highlight.board()
+  if (
+    dialog.options.player === symbol &&
+    dialog.options.opponent === dialog.OPPONENT.COMPUTER
+  ) {
+    customEvent()
+    boxList.flat().forEach((box) => (box.disabled = true))
+    setTimeout(() => {
+      customEvent()
+      boxList.flat().forEach((box) => (box.disabled = false))
+    }, 250)
   } else {
-    const index = calculate[event]()
-    highlight.turn(board.coordinate, boardList.at(index).coordinate)
+    customEvent()
   }
-  addIteminMoveList(event, board.turn)
 }
 
 const addIteminMoveList = (action, turn) => {
@@ -156,8 +170,8 @@ const reset = () => {
   }
 
   setTimeout(() => {
-    boxList.flat().forEach((box) => (box.disabled = false))
     playVsComputer()
+    boxList.flat().forEach((box) => (box.disabled = false))
   }, delay)
 }
 
@@ -175,6 +189,7 @@ boxList.forEach((parent, i) => {
 
 btnUndo.addEventListener('click', () => {
   triggerEvent('undo', () => {
+    isGameActive = true
     disableAllBox(false)
     boxList.flat().forEach((box) => box.removeAttribute('style'))
   })
@@ -182,11 +197,10 @@ btnUndo.addEventListener('click', () => {
 
 btnRedo.addEventListener('click', () => {
   triggerEvent('redo', () => {
-    if (counter.value() === boardList.at(-1).turn) {
-      if (pattern.length !== 0) {
-        highlight.pattern(pattern)
-        disableAllBox(true)
-      }
+    if (counter.value() === boardList.at(-1).turn && pattern.length !== 0) {
+      isGameActive = false
+      disableAllBox(true)
+      highlight.pattern(pattern)
     }
   })
 })
